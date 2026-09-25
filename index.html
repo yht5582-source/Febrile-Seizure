@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小兒熱性痙攣評估與決策路徑</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#fd7e14">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .card { border: none; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
+    .card-header { background-color: #fff; border-bottom: 1px solid #eee; font-weight: bold; border-radius: 12px 12px 0 0 !important; }
+    .result-box { padding: 15px; border-radius: 8px; margin-bottom: 15px; background-color: #fff; border: 1px solid #dee2e6; }
+    .result-title { font-size: 0.9rem; color: #6c757d; margin-bottom: 5px; font-weight: bold; }
+    .result-value { font-size: 1.3rem; font-weight: bold; color: #212529; }
+    
+    /* 狀態顏色 */
+    .type-simple { background-color: #d1e7dd; border-color: #0f5132; color: #0f5132; }
+    .type-complex { background-color: #fff3cd; border-color: #856404; color: #856404; }
+    .type-danger { background-color: #f8d7da; border-color: #842029; color: #842029; }
+
+    /* 列印專屬樣式 */
+    @media print {
+      .d-print-none { display: none !important; }
+      body { background-color: #fff; color: #000; font-size: 12pt; }
+      #print-section { display: block !important; }
+      .print-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
+      .print-row { display: flex; justify-content: space-between; margin-bottom: 15px; }
+      .print-box { border: 1px solid #000; padding: 15px; margin-bottom: 15px; border-radius: 5px; }
+      .signature-area { margin-top: 50px; text-align: right; }
+      .type-simple, .type-complex, .type-danger { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container py-4 d-print-none">
+  <h2 class="text-center mb-4" style="color: #fd7e14;">小兒熱性痙攣評估與決策路徑</h2>
+  
+  <div class="row">
+    <!-- 左側輸入區 -->
+    <div class="col-md-5">
+      <div class="card">
+        <div class="card-header text-primary">1. 臨床評估 (Clinical Assessment)</div>
+        <div class="card-body">
+          <form id="seizureForm">
+            <h6 class="text-secondary mb-3">基本條件</h6>
+            <div class="mb-3">
+              <label class="form-label fw-bold">病童年齡 (Age) *</label>
+              <select class="form-select border-primary" id="ageGroup">
+                <option value="under6">小於 6 個月</option>
+                <option value="6to12">6 到 12 個月</option>
+                <option value="12to60" selected>12 個月 到 5 歲 (典型好發區間)</option>
+                <option value="over60">大於 5 歲</option>
+              </select>
+            </div>
+            
+            <div class="mb-3 form-check text-danger">
+              <input type="checkbox" class="form-check-input border-danger" id="meningitisSigns">
+              <label class="form-check-label fw-bold" for="meningitisSigns">
+                具備腦膜炎或中樞神經感染徵候<br>
+                <small class="text-muted">(如：頸部僵硬、前囟門凸起、持續昏睡不醒)</small>
+              </label>
+            </div>
+
+            <hr>
+            <h6 class="text-secondary mb-3">發作特徵 (Seizure Characteristics)</h6>
+            
+            <div class="mb-3">
+              <label class="form-label fw-bold">1. 發作持續時間 (Duration)</label>
+              <select class="form-select" id="duration">
+                <option value="0">小於 15 分鐘 (通常僅 1-2 分鐘)</option>
+                <option value="1">大於或等於 15 分鐘 (或接連發作且意識未恢復)</option>
+              </select>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label fw-bold">2. 發作型態 (Type)</label>
+              <select class="form-select" id="type">
+                <option value="0">全身性發作 (Generalized: 雙側對稱、眼球上吊)</option>
+                <option value="1">局部性發作 (Focal: 單側抽搐、局部表徵)</option>
+              </select>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-bold">3. 24小時內發作次數 (Recurrence)</label>
+              <select class="form-select" id="recurrence">
+                <option value="0">僅發作 1 次 (未復發)</option>
+                <option value="1">24 小時內發作 ≥ 2 次</option>
+              </select>
+            </div>
+
+            <button type="button" class="btn btn-warning text-dark fw-bold w-100 py-2 mb-2" onclick="evaluateSeizure()">分析分型與產出決策</button>
+            <button type="button" class="btn btn-outline-secondary w-100 py-2" id="printBtn" onclick="printOrder()" disabled>🖨️ 列印評估與衛教單 (PDF)</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右側結果區 -->
+    <div class="col-md-7">
+      <div class="card">
+        <div class="card-header text-success">2. 臨床決策與衛教建議</div>
+        <div class="card-body">
+          
+          <div class="result-box text-center" id="resClassBox">
+            <div class="result-title">疾病分類診斷 (Classification)</div>
+            <div class="result-value" id="resClassification">請先輸入參數進行評估</div>
+          </div>
+
+          <h6 class="mt-3 text-secondary">醫療處置建議 (AAP Guidelines)</h6>
+          <div class="row">
+            <div class="col-12 mb-2">
+              <div class="result-box border-danger" id="boxLP">
+                <div class="result-title">腰椎穿刺 (Lumbar Puncture)</div>
+                <div id="resLP">--</div>
+              </div>
+            </div>
+            <div class="col-6 mb-2">
+              <div class="result-box">
+                <div class="result-title">腦波檢查 (EEG)</div>
+                <div id="resEEG">--</div>
+              </div>
+            </div>
+            <div class="col-6 mb-2">
+              <div class="result-box">
+                <div class="result-title">神經影像 (CT / MRI)</div>
+                <div id="resImage">--</div>
+              </div>
+            </div>
+          </div>
+
+          <h6 class="mt-3 text-secondary">預後與家屬衛教數據 (Prognosis)</h6>
+          <div class="result-box" style="background-color: #f8f9fa;">
+            <ul class="mb-0" id="resEdu" style="font-size: 0.95rem;">
+              <li><strong>再次熱性痙攣機率：</strong> 約 30-35% (若初次發作小於 1 歲則高達 50%)。</li>
+              <li><strong>未來發展為癲癇機率：</strong> --</li>
+              <li><strong>居家急救 SOP：</strong> 保持呼吸道通暢、側躺防嗆、勿塞物入嘴。若發作 > 5 分鐘請立即撥打 119。</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 列印專屬區塊 ================= -->
+<div id="print-section" style="display: none;">
+  <div class="print-header">
+    <h2>小兒熱性痙攣 (Febrile Seizure) 評估與處置單</h2>
+  </div>
+  
+  <div class="print-row">
+    <div>
+      <strong>病歷號:</strong> ___________________<br>
+      <strong>病患姓名:</strong> ___________________
+    </div>
+    <div>
+      <strong>評估時間:</strong> <span id="prtDateTime"></span><br>
+      <strong>病童年齡:</strong> <span id="prtAge"></span>
+    </div>
+  </div>
+
+  <div class="print-box" id="prtClassBox">
+    <h4>一、 臨床特徵與診斷分型</h4>
+    <ul>
+      <li>發作持續時間: <span id="prtDuration"></span></li>
+      <li>發作型態: <span id="prtType"></span></li>
+      <li>24小時內發作次數: <span id="prtRecurrence"></span></li>
+      <li>腦膜炎徵候: <span id="prtMeningitis"></span></li>
+    </ul>
+    <p><strong>判定結果 (Classification):</strong> <strong style="font-size: 1.3em;" id="prtClassification"></strong></p>
+  </div>
+
+  <div class="print-box">
+    <h4>二、 臨床檢查建議 (AAP Guideline)</h4>
+    <p><strong>腰椎穿刺 (Lumbar Puncture):</strong> <span id="prtLP"></span></p>
+    <p><strong>腦波檢查 (EEG):</strong> <span id="prtEEG"></span></p>
+    <p><strong>神經影像 (CT/MRI):</strong> <span id="prtImage"></span></p>
+    <p><strong>血液檢查 (Blood work):</strong> 常規不建議，視發燒感染源 (如: 懷疑泌尿道感染或嚴重敗血症) 決定。</p>
+  </div>
+
+  <div class="print-box">
+    <h4>三、 家屬衛教與預後說明 (Parental Education)</h4>
+    <ul>
+      <li><strong>熱性痙攣復發率:</strong> 約 30-35%。(若初次發作年齡小於 1 歲、有家族史、發燒前體溫較低即發作，機率更高)</li>
+      <li><strong>發展為癲癇機率:</strong> <span id="prtEpilepsyRisk"></span></li>
+      <li><strong>智力與發展:</strong> 熱性痙攣不會造成腦部損傷，不會影響智商或學習能力。</li>
+      <li><strong>居家處理原則:</strong>
+        <ol>
+          <li>保持冷靜，將孩童移至安全平坦處。</li>
+          <li>讓孩童側躺，使口水或嘔吐物自然流出，避免窒息。</li>
+          <li><strong>絕對禁止</strong> 將手指、湯匙或任何物品塞入孩童口中。</li>
+          <li>紀錄發作持續時間與特徵。</li>
+          <li>若發作超過 5 分鐘未停止，請立即送醫或撥打 119。</li>
+        </ol>
+      </li>
+    </ul>
+  </div>
+
+  <div class="signature-area">
+    <p><strong>評估醫師簽章:</strong> ___________________________</p>
+  </div>
+</div>
+
+<script>
+  let latestData = null;
+
+  function evaluateSeizure() {
+    const age = document.getElementById('ageGroup').value;
+    const isMeningitis = document.getElementById('meningitisSigns').checked;
+    
+    const duration = parseInt(document.getElementById('duration').value);
+    const type = parseInt(document.getElementById('type').value);
+    const recurrence = parseInt(document.getElementById('recurrence').value);
+    
+    let classification = "";
+    let classBoxStyle = "";
+    
+    let recLP = "";
+    let recEEG = "";
+    let recImage = "";
+    let epilepsyRisk = "";
+
+    // 1. 優先排除中樞神經感染 / 非典型年齡
+    if (isMeningitis) {
+      classification = "🚨 高度懷疑中樞神經感染 (Suspected CNS Infection)";
+      classBoxStyle = "type-danger";
+      recLP = "<strong>強烈建議執行 (Strongly Recommended)</strong>。需排除腦膜炎/腦炎，建議同步經驗性抗生素治療。";
+      recEEG = "視發作是否持續或懷疑非痙攣性重積狀態 (NCSE) 而定。";
+      recImage = "若有局部神經學異常或腦壓增高徵象，建議先做 CT/MRI 再行 LP。";
+      epilepsyRisk = "取決於感染造成的腦部損傷程度。";
+    } else if (age === "under6" || age === "over60") {
+      classification = "⚠️ 非典型年齡之痙攣 (Atypical Age for Febrile Seizure)";
+      classBoxStyle = "type-complex";
+      recLP = age === "under6" ? "強烈建議執行 (年紀極小，感染表徵常不明顯)。" : "視臨床懷疑而定。";
+      recEEG = "建議安排以排除其他癲癇症候群。";
+      recImage = "需高度懷疑腦部結構異常或佔位性病變，建議安排 CT/MRI。";
+      epilepsyRisk = "需進一步由小兒神經科評估。";
+    } 
+    // 2. 判斷 單純型 vs 複雜型
+    else {
+      const isComplex = (duration === 1 || type === 1 || recurrence === 1);
+      
+      if (isComplex) {
+        classification = "⚠️ 複雜型熱性痙攣 (Complex Febrile Seizure)";
+        classBoxStyle = "type-complex";
+        
+        // LP 建議 (依據年齡)
+        if (age === "6to12") {
+          recLP = "<strong>建議考慮 (Consider)</strong>。特別是若未完整接種 Hib 或肺炎鏈球菌疫苗的病童。";
+        } else {
+          recLP = "常規不建議。除非臨床出現腦膜炎徵候。";
+        }
+        
+        recEEG = "<strong>建議安排門診追蹤腦波</strong>，以排除潛在神經學異常或局部放電。";
+        recImage = "若病童神經學檢查有局部異常(如單側無力、Todd's paralysis) 或巨腦症，建議安排 MRI。";
+        epilepsyRisk = "約 5 - 10% (高於一般人群)。若合併神經發展遲緩或家族史，風險更高。";
+      } else {
+        classification = "✅ 單純型熱性痙攣 (Simple Febrile Seizure)";
+        classBoxStyle = "type-simple";
+        
+        if (age === "6to12") {
+          recLP = "建議考慮。特別是若未完整接種疫苗或曾事先使用抗生素(可能掩蓋症狀)的病童。";
+        } else {
+          recLP = "常規不需執行 (Not routinely recommended)。";
+        }
+        
+        recEEG = "不需執行。健康病童單純型發作不建議常規排 EEG。";
+        recImage = "不需執行。單純型發作無安排 CT/MRI 之適應症。";
+        epilepsyRisk = "約 1 - 2% (與一般健康兒童發生癲癇的機率幾乎相同)。";
+      }
+    }
+
+    // 更新 UI
+    const resClassBox = document.getElementById('resClassBox');
+    resClassBox.className = `result-box text-center ${classBoxStyle}`;
+    document.getElementById('resClassification').innerText = classification;
+
+    document.getElementById('resLP').innerHTML = recLP;
+    document.getElementById('resEEG').innerHTML = recEEG;
+    document.getElementById('resImage').innerHTML = recImage;
+
+    const eduUl = document.getElementById('resEdu');
+    eduUl.innerHTML = `
+      <li><strong>再次熱性痙攣機率：</strong> 約 30-35% (若初次發作小於 1 歲則高達 50%)。</li>
+      <li><strong>未來發展為癲癇機率：</strong> ${epilepsyRisk}</li>
+      <li><strong>居家急救 SOP：</strong> 保持側躺防嗆、勿塞物入嘴。若發作 > 5 分鐘請立即撥打 119。</li>
+    `;
+
+    // 儲存列印資料
+    const ageText = document.getElementById("ageGroup").options[document.getElementById("ageGroup").selectedIndex].text;
+    const durText = document.getElementById("duration").options[document.getElementById("duration").selectedIndex].text;
+    const typeText = document.getElementById("type").options[document.getElementById("type").selectedIndex].text;
+    const recText = document.getElementById("recurrence").options[document.getElementById("recurrence").selectedIndex].text;
+    const menText = isMeningitis ? "有" : "無";
+
+    latestData = {
+      ageText, durText, typeText, recText, menText,
+      classification, classBoxStyle,
+      recLP: recLP.replace(/<[^>]*>?/gm, ''), // 移除HTML標籤供列印
+      recEEG: recEEG.replace(/<[^>]*>?/gm, ''),
+      recImage: recImage.replace(/<[^>]*>?/gm, ''),
+      epilepsyRisk
+    };
+
+    document.getElementById('printBtn').disabled = false;
+  }
+
+  function printOrder() {
+    if (!latestData) return;
+    
+    document.getElementById('prtDateTime').innerText = new Date().toLocaleString('zh-TW');
+    document.getElementById('prtAge').innerText = latestData.ageText;
+    
+    document.getElementById('prtDuration').innerText = latestData.durText;
+    document.getElementById('prtType').innerText = latestData.typeText;
+    document.getElementById('prtRecurrence').innerText = latestData.recText;
+    document.getElementById('prtMeningitis').innerText = latestData.menText;
+
+    const prtClassBox = document.getElementById('prtClassBox');
+    prtClassBox.className = `print-box ${latestData.classBoxStyle}`;
+    document.getElementById('prtClassification').innerText = latestData.classification;
+
+    document.getElementById('prtLP').innerText = latestData.recLP;
+    document.getElementById('prtEEG').innerText = latestData.recEEG;
+    document.getElementById('prtImage').innerText = latestData.recImage;
+    
+    document.getElementById('prtEpilepsyRisk').innerText = latestData.epilepsyRisk;
+
+    window.print();
+  }
+</script>
+
+</body>
+</html>
