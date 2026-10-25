@@ -1,0 +1,13 @@
+{
+  "name": "小兒熱性痙攣評估與決策路徑",
+  "short_name": "熱性痙攣",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8f9fa",
+  "theme_color": "#fd7e14",
+  "lang": "zh-TW",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

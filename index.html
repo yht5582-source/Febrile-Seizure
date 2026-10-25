@@ -4,31 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>小兒熱性痙攣評估與決策路徑</title>
-  <link rel="manifest" href="manifest.json">
+  <meta name="description" content="依 AAP 2011 單純型熱性痙攣神經診斷評估指引與 AAP 2008 長期處置指引，鑑別單純型／複雜型熱性痙攣並產出 LP、EEG、影像、處置與衛教建議。">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
   <meta name="theme-color" content="#fd7e14">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #f8f9fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang TC', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; }
     .card { border: none; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
     .card-header { background-color: #fff; border-bottom: 1px solid #eee; font-weight: bold; border-radius: 12px 12px 0 0 !important; }
     .result-box { padding: 15px; border-radius: 8px; margin-bottom: 15px; background-color: #fff; border: 1px solid #dee2e6; }
     .result-title { font-size: 0.9rem; color: #6c757d; margin-bottom: 5px; font-weight: bold; }
     .result-value { font-size: 1.3rem; font-weight: bold; color: #212529; }
-    
+    .reasons { font-size: 0.9rem; margin-top: 6px; }
+    .form-check { margin-bottom: 0.4rem; }
+    .lvl { display: inline-block; font-size: 0.75rem; font-weight: bold; padding: 1px 8px; border-radius: 10px; margin-right: 6px; vertical-align: 1px; }
+    .lvl-must { background: #842029; color: #fff; }
+    .lvl-consider { background: #fd7e14; color: #fff; }
+    .lvl-option { background: #ffc107; color: #212529; }
+    .lvl-no { background: #198754; color: #fff; }
+    .lvl-defer { background: #6c757d; color: #fff; }
+    .se-banner { background: #842029; color: #fff; border-radius: 8px; padding: 12px 15px; margin-bottom: 15px; }
+    .se-banner a { color: #fff; font-weight: bold; }
+    .sample-tag { font-size: 0.75rem; background: #fff3cd; color: #856404; border: 1px solid #ffe69c; border-radius: 10px; padding: 1px 8px; }
+    @media (min-width: 768px) { .sticky-md { position: sticky; top: 16px; } }
+
     /* 狀態顏色 */
     .type-simple { background-color: #d1e7dd; border-color: #0f5132; color: #0f5132; }
     .type-complex { background-color: #fff3cd; border-color: #856404; color: #856404; }
     .type-danger { background-color: #f8d7da; border-color: #842029; color: #842029; }
+    .type-simple .result-value, .type-complex .result-value, .type-danger .result-value { color: inherit; }
 
     /* 列印專屬樣式 */
     @media print {
       .d-print-none { display: none !important; }
-      body { background-color: #fff; color: #000; font-size: 12pt; }
+      body { background-color: #fff; color: #000; font-size: 11pt; }
       #print-section { display: block !important; }
-      .print-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
-      .print-row { display: flex; justify-content: space-between; margin-bottom: 15px; }
-      .print-box { border: 1px solid #000; padding: 15px; margin-bottom: 15px; border-radius: 5px; }
-      .signature-area { margin-top: 50px; text-align: right; }
+      .print-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 16px; }
+      .print-row { display: flex; justify-content: space-between; margin-bottom: 12px; }
+      .print-box { border: 1px solid #000; padding: 12px 15px; margin-bottom: 12px; border-radius: 5px; break-inside: avoid; }
+      .print-box h4 { font-size: 13pt; }
+      .signature-area { margin-top: 30px; text-align: right; }
       .type-simple, .type-complex, .type-danger { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     }
   </style>
@@ -36,63 +53,137 @@
 <body>
 
 <div class="container py-4 d-print-none">
-  <h2 class="text-center mb-4" style="color: #fd7e14;">小兒熱性痙攣評估與決策路徑</h2>
-  
+  <h2 class="text-center mb-1" style="color: #fd7e14;">小兒熱性痙攣評估與決策路徑</h2>
+  <p class="text-center text-muted small mb-4">AAP 2011 單純型熱性痙攣神經診斷評估 · AAP 2008 長期處置 · v2.0</p>
+
   <div class="row">
     <!-- 左側輸入區 -->
     <div class="col-md-5">
       <div class="card">
-        <div class="card-header text-primary">1. 臨床評估 (Clinical Assessment)</div>
+        <div class="card-header text-primary d-flex justify-content-between align-items-center">
+          <span>1. 臨床評估 (Clinical Assessment)</span>
+          <span>
+            <button type="button" class="btn btn-sm btn-outline-warning" id="sampleBtn">載入示例</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="resetBtn">清除</button>
+          </span>
+        </div>
         <div class="card-body">
-          <form id="seizureForm">
-            <h6 class="text-secondary mb-3">基本條件</h6>
-            <div class="mb-3">
-              <label class="form-label fw-bold">病童年齡 (Age) *</label>
-              <select class="form-select border-primary" id="ageGroup">
-                <option value="under6">小於 6 個月</option>
-                <option value="6to12">6 到 12 個月</option>
-                <option value="12to60" selected>12 個月 到 5 歲 (典型好發區間)</option>
-                <option value="over60">大於 5 歲</option>
-              </select>
+          <form id="seizureForm" onsubmit="return false;">
+            <div class="se-banner d-none" id="sampleNote" style="background:#fff3cd;color:#856404;border:1px solid #ffe69c;">
+              <span class="sample-tag">示例</span> 18 個月男童，發燒 2 小時後全身強直陣攣 3 分鐘，已恢復意識，疫苗依時程完成。
             </div>
-            
+
             <div class="mb-3 form-check text-danger">
-              <input type="checkbox" class="form-check-input border-danger" id="meningitisSigns">
-              <label class="form-check-label fw-bold" for="meningitisSigns">
-                具備腦膜炎或中樞神經感染徵候<br>
-                <small class="text-muted">(如：頸部僵硬、前囟門凸起、持續昏睡不醒)</small>
+              <input type="checkbox" class="form-check-input border-danger" id="ongoing">
+              <label class="form-check-label fw-bold" for="ongoing">
+                目前仍在抽搐，或已發作 ≥ 5 分鐘未停止
               </label>
+            </div>
+
+            <h6 class="text-secondary mb-3">基本條件</h6>
+            <div class="row g-2 mb-3">
+              <div class="col-7">
+                <label class="form-label fw-bold" for="ageMo">年齡（月）*</label>
+                <input type="number" class="form-control border-primary" id="ageMo" min="0" max="216" step="1" inputmode="numeric" placeholder="例：18">
+                <div class="form-text" id="ageHint">熱性痙攣典型年齡 6–60 個月</div>
+              </div>
+              <div class="col-5">
+                <label class="form-label fw-bold" for="weight">體重 (kg)</label>
+                <input type="number" class="form-control" id="weight" min="1" max="100" step="0.1" inputmode="decimal" placeholder="選填">
+                <div class="form-text">計算急救藥劑量</div>
+              </div>
+            </div>
+
+            <h6 class="text-danger mb-2">紅旗徵候 (Red Flags)</h6>
+            <div class="mb-3">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="meningeal">
+                <label class="form-check-label" for="meningeal">腦膜刺激徵候（頸部僵硬、Kernig/Brudzinski、前囟門膨出）</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="toxic">
+                <label class="form-check-label" for="toxic">病容重 (toxic) / 疑敗血症、皮下出血點</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="notBaseline">
+                <label class="form-check-label" for="notBaseline">發作後意識遲遲未恢復至基準（約 &gt; 1 小時）或持續昏睡、躁動</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="focalDeficit">
+                <label class="form-check-label" for="focalDeficit">發作後局部神經缺損（如單側無力 Todd's paralysis）或顱內壓增高徵象</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="afebrilePrior">
+                <label class="form-check-label" for="afebrilePrior">過去曾有「無發燒」的痙攣發作</label>
+              </div>
             </div>
 
             <hr>
             <h6 class="text-secondary mb-3">發作特徵 (Seizure Characteristics)</h6>
-            
+
             <div class="mb-3">
-              <label class="form-label fw-bold">1. 發作持續時間 (Duration)</label>
+              <label class="form-label fw-bold" for="duration">1. 單次發作持續時間</label>
               <select class="form-select" id="duration">
-                <option value="0">小於 15 分鐘 (通常僅 1-2 分鐘)</option>
-                <option value="1">大於或等於 15 分鐘 (或接連發作且意識未恢復)</option>
+                <option value="lt15">&lt; 15 分鐘（通常 1–2 分鐘）</option>
+                <option value="15to29">15–29 分鐘</option>
+                <option value="ge30">≥ 30 分鐘，或接連發作期間意識未恢復（熱性重積）</option>
               </select>
             </div>
-            
+
             <div class="mb-3">
-              <label class="form-label fw-bold">2. 發作型態 (Type)</label>
+              <label class="form-label fw-bold" for="type">2. 發作型態</label>
               <select class="form-select" id="type">
-                <option value="0">全身性發作 (Generalized: 雙側對稱、眼球上吊)</option>
-                <option value="1">局部性發作 (Focal: 單側抽搐、局部表徵)</option>
+                <option value="gen">全身性（雙側對稱強直／陣攣）</option>
+                <option value="focal">局部性（單側抽搐、眼頭偏向一側、局部起始）</option>
               </select>
             </div>
 
-            <div class="mb-4">
-              <label class="form-label fw-bold">3. 24小時內發作次數 (Recurrence)</label>
+            <div class="mb-3">
+              <label class="form-label fw-bold" for="recurrence">3. 同一發燒病程 / 24 小時內次數</label>
               <select class="form-select" id="recurrence">
-                <option value="0">僅發作 1 次 (未復發)</option>
-                <option value="1">24 小時內發作 ≥ 2 次</option>
+                <option value="1">僅 1 次</option>
+                <option value="2">≥ 2 次</option>
               </select>
             </div>
 
-            <button type="button" class="btn btn-warning text-dark fw-bold w-100 py-2 mb-2" onclick="evaluateSeizure()">分析分型與產出決策</button>
-            <button type="button" class="btn btn-outline-secondary w-100 py-2" id="printBtn" onclick="printOrder()" disabled>🖨️ 列印評估與衛教單 (PDF)</button>
+            <hr>
+            <h6 class="text-secondary mb-2">腰椎穿刺相關</h6>
+            <div class="mb-3">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="vaxIncomplete">
+                <label class="form-check-label" for="vaxIncomplete">Hib 或肺炎鏈球菌疫苗未依時程完成／不詳<br><small class="text-muted">台灣時程：Hib（五/六合一）2、4、6 月；PCV13 2、4 月，12–15 月追加</small></label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="abxPretreated">
+                <label class="form-check-label" for="abxPretreated">發作前已使用抗生素（可能掩蓋腦膜炎表現）</label>
+              </div>
+            </div>
+
+            <h6 class="text-secondary mb-2">預後危險因子</h6>
+            <div class="mb-3">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="famFS">
+                <label class="form-check-label" for="famFS">一等親有熱性痙攣病史</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="tempLt40">
+                <label class="form-check-label" for="tempLt40">發作時體溫 &lt; 40°C</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="feverLt1h">
+                <label class="form-check-label" for="feverLt1h">發燒開始到發作 &lt; 1 小時</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="famEpilepsy">
+                <label class="form-check-label" for="famEpilepsy">一等親有癲癇病史</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="neuroHx">
+                <label class="form-check-label" for="neuroHx">原本即有神經發展遲緩或神經學異常（如腦性麻痺）</label>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-outline-secondary w-100 py-2" id="printBtn" disabled>🖨️ 列印評估與衛教單 (PDF)</button>
           </form>
         </div>
       </div>
@@ -100,48 +191,84 @@
 
     <!-- 右側結果區 -->
     <div class="col-md-7">
+      <div class="sticky-md">
       <div class="card">
-        <div class="card-header text-success">2. 臨床決策與衛教建議</div>
+        <div class="card-header text-success">2. 臨床決策與衛教建議 <small class="text-muted fw-normal">（輸入即時更新）</small></div>
         <div class="card-body">
-          
-          <div class="result-box text-center" id="resClassBox">
-            <div class="result-title">疾病分類診斷 (Classification)</div>
-            <div class="result-value" id="resClassification">請先輸入參數進行評估</div>
+
+          <div class="se-banner d-none" id="seBanner">
+            🚨 <strong>痙攣進行中 / ≥ 5 分鐘：視為癲癇重積狀態</strong>，先 ABC、給氧、測血糖，立即給予 benzodiazepine（劑量見下方），並依
+            <a href="https://yht5582-source.github.io/epilepticus-/" target="_blank" rel="noopener">癲癇重積處置流程</a> 進行。以下檢查建議請於止痙攣、穩定後再評估。
           </div>
 
-          <h6 class="mt-3 text-secondary">醫療處置建議 (AAP Guidelines)</h6>
+          <div class="result-box text-center" id="resClassBox">
+            <div class="result-title">疾病分類診斷 (Classification)</div>
+            <div class="result-value" id="resClassification">請輸入年齡開始評估</div>
+            <div class="reasons" id="resReasons"></div>
+          </div>
+
+          <h6 class="mt-3 text-secondary">醫療處置建議</h6>
           <div class="row">
             <div class="col-12 mb-2">
-              <div class="result-box border-danger" id="boxLP">
+              <div class="result-box" id="boxLP">
                 <div class="result-title">腰椎穿刺 (Lumbar Puncture)</div>
                 <div id="resLP">--</div>
               </div>
             </div>
-            <div class="col-6 mb-2">
-              <div class="result-box">
+            <div class="col-md-6 mb-2">
+              <div class="result-box h-100">
                 <div class="result-title">腦波檢查 (EEG)</div>
                 <div id="resEEG">--</div>
               </div>
             </div>
-            <div class="col-6 mb-2">
-              <div class="result-box">
+            <div class="col-md-6 mb-2">
+              <div class="result-box h-100">
                 <div class="result-title">神經影像 (CT / MRI)</div>
                 <div id="resImage">--</div>
               </div>
             </div>
+            <div class="col-md-6 mb-2">
+              <div class="result-box h-100">
+                <div class="result-title">血液 / 尿液檢查</div>
+                <div id="resLabs">--</div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-2">
+              <div class="result-box h-100">
+                <div class="result-title">處置去向 (Disposition)</div>
+                <div id="resDispo">--</div>
+              </div>
+            </div>
           </div>
 
-          <h6 class="mt-3 text-secondary">預後與家屬衛教數據 (Prognosis)</h6>
+          <h6 class="mt-3 text-secondary">急救用藥 (Rescue Benzodiazepine)</h6>
+          <div class="result-box" id="resRescue">--</div>
+
+          <h6 class="mt-3 text-secondary">預後與家屬衛教 (Prognosis)</h6>
           <div class="result-box" style="background-color: #f8f9fa;">
             <ul class="mb-0" id="resEdu" style="font-size: 0.95rem;">
-              <li><strong>再次熱性痙攣機率：</strong> 約 30-35% (若初次發作小於 1 歲則高達 50%)。</li>
-              <li><strong>未來發展為癲癇機率：</strong> --</li>
-              <li><strong>居家急救 SOP：</strong> 保持呼吸道通暢、側躺防嗆、勿塞物入嘴。若發作 > 5 分鐘請立即撥打 119。</li>
+              <li>--</li>
             </ul>
           </div>
 
         </div>
       </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">參考文獻與免責聲明</div>
+    <div class="card-body small">
+      <ol class="mb-3">
+        <li>Subcommittee on Febrile Seizures, AAP. Neurodiagnostic evaluation of the child with a simple febrile seizure. <em>Pediatrics</em> 2011;127(2):389–394. doi:10.1542/peds.2010-3318</li>
+        <li>Steering Committee on Quality Improvement and Management, Subcommittee on Febrile Seizures, AAP. Febrile seizures: clinical practice guideline for the long-term management of the child with simple febrile seizures. <em>Pediatrics</em> 2008;121(6):1281–1286. doi:10.1542/peds.2008-0939</li>
+        <li>Berg AT, et al. Predictors of recurrent febrile seizures: a prospective cohort study. <em>Arch Pediatr Adolesc Med</em> 1997;151(4):371–378.（復發率依 AAFP Point-of-Care Guide 2020 整理：0–4 項 13/23/32/62/76%）</li>
+        <li>Annegers JF, et al. Factors prognostic of unprovoked seizures after febrile convulsions. <em>N Engl J Med</em> 1987;316(9):493–498.</li>
+        <li>Shinnar S, et al. FEBSTAT study: MRI and EEG abnormalities after febrile status epilepticus. <em>Neurology</em> 2012;79(9):871–877；<em>Ann Neurol</em> 2014.</li>
+        <li>Glauser T, et al. AES guideline: treatment of convulsive status epilepticus in children and adults. <em>Epilepsy Curr</em> 2016;16(1):48–61.</li>
+      </ol>
+      <p class="mb-0 text-muted">本工具僅供醫療專業人員快速參考與衛教輔助，不能取代醫師的臨床判斷與完整神經學檢查。單純型熱性痙攣的診斷以「已排除中樞神經感染」為前提；觀察期間若出現意識未恢復、持續昏睡或頸部僵硬等表現，應隨時推翻原判斷並啟動腰椎穿刺與經驗性抗生素治療。藥物劑量請依院內規範與最新仿單核對。</p>
     </div>
   </div>
 </div>
@@ -151,7 +278,7 @@
   <div class="print-header">
     <h2>小兒熱性痙攣 (Febrile Seizure) 評估與處置單</h2>
   </div>
-  
+
   <div class="print-row">
     <div>
       <strong>病歷號:</strong> ___________________<br>
@@ -159,42 +286,40 @@
     </div>
     <div>
       <strong>評估時間:</strong> <span id="prtDateTime"></span><br>
-      <strong>病童年齡:</strong> <span id="prtAge"></span>
+      <strong>病童年齡 / 體重:</strong> <span id="prtAge"></span>
     </div>
   </div>
 
   <div class="print-box" id="prtClassBox">
     <h4>一、 臨床特徵與診斷分型</h4>
-    <ul>
-      <li>發作持續時間: <span id="prtDuration"></span></li>
-      <li>發作型態: <span id="prtType"></span></li>
-      <li>24小時內發作次數: <span id="prtRecurrence"></span></li>
-      <li>腦膜炎徵候: <span id="prtMeningitis"></span></li>
-    </ul>
-    <p><strong>判定結果 (Classification):</strong> <strong style="font-size: 1.3em;" id="prtClassification"></strong></p>
+    <ul id="prtFeatures"></ul>
+    <p class="mb-0"><strong>判定結果 (Classification):</strong> <strong style="font-size: 1.2em;" id="prtClassification"></strong></p>
   </div>
 
   <div class="print-box">
-    <h4>二、 臨床檢查建議 (AAP Guideline)</h4>
-    <p><strong>腰椎穿刺 (Lumbar Puncture):</strong> <span id="prtLP"></span></p>
+    <h4>二、 臨床檢查與處置建議</h4>
+    <p><strong>腰椎穿刺:</strong> <span id="prtLP"></span></p>
     <p><strong>腦波檢查 (EEG):</strong> <span id="prtEEG"></span></p>
     <p><strong>神經影像 (CT/MRI):</strong> <span id="prtImage"></span></p>
-    <p><strong>血液檢查 (Blood work):</strong> 常規不建議，視發燒感染源 (如: 懷疑泌尿道感染或嚴重敗血症) 決定。</p>
+    <p><strong>血液 / 尿液檢查:</strong> <span id="prtLabs"></span></p>
+    <p><strong>處置去向:</strong> <span id="prtDispo"></span></p>
+    <p class="mb-0"><strong>急救用藥:</strong> <span id="prtRescue"></span></p>
   </div>
 
   <div class="print-box">
     <h4>三、 家屬衛教與預後說明 (Parental Education)</h4>
     <ul>
-      <li><strong>熱性痙攣復發率:</strong> 約 30-35%。(若初次發作年齡小於 1 歲、有家族史、發燒前體溫較低即發作，機率更高)</li>
-      <li><strong>發展為癲癇機率:</strong> <span id="prtEpilepsyRisk"></span></li>
-      <li><strong>智力與發展:</strong> 熱性痙攣不會造成腦部損傷，不會影響智商或學習能力。</li>
+      <li><strong>熱性痙攣復發率:</strong> <span id="prtRecur"></span></li>
+      <li><strong>日後發展為癲癇機率:</strong> <span id="prtEpilepsyRisk"></span></li>
+      <li><strong>智力與發展:</strong> 單純型熱性痙攣不會造成腦部損傷，不會影響智力或學習能力。</li>
+      <li><strong>退燒藥:</strong> 可讓孩子舒服些，但<strong>無法預防</strong>熱性痙攣再發；也不需要長期服用抗癲癇藥。</li>
       <li><strong>居家處理原則:</strong>
         <ol>
-          <li>保持冷靜，將孩童移至安全平坦處。</li>
-          <li>讓孩童側躺，使口水或嘔吐物自然流出，避免窒息。</li>
-          <li><strong>絕對禁止</strong> 將手指、湯匙或任何物品塞入孩童口中。</li>
-          <li>紀錄發作持續時間與特徵。</li>
-          <li>若發作超過 5 分鐘未停止，請立即送醫或撥打 119。</li>
+          <li>保持冷靜，將孩童移至安全平坦處，移開周圍硬物。</li>
+          <li>讓孩童側躺，使口水或嘔吐物自然流出，避免嗆到。</li>
+          <li><strong>絕對禁止</strong> 將手指、湯匙或任何物品塞入孩童口中，也不要強壓肢體。</li>
+          <li>看時間、記錄發作持續多久與樣子（可錄影給醫師看）。</li>
+          <li>發作超過 5 分鐘未停止、停止後呼吸困難或嘴唇發紫、或一直叫不醒，請立即撥打 119。</li>
         </ol>
       </li>
     </ul>
@@ -206,131 +331,310 @@
 </div>
 
 <script>
-  let latestData = null;
+/*ENGINE-START*/
+const FS = (() => {
+  // Berg 1997 四項因子（AAFP POC Guide 2020）：0–4 項對應復發率
+  const RECUR_PCT = [13, 23, 32, 62, 76];
 
-  function evaluateSeizure() {
-    const age = document.getElementById('ageGroup').value;
-    const isMeningitis = document.getElementById('meningitisSigns').checked;
-    
-    const duration = parseInt(document.getElementById('duration').value);
-    const type = parseInt(document.getElementById('type').value);
-    const recurrence = parseInt(document.getElementById('recurrence').value);
-    
-    let classification = "";
-    let classBoxStyle = "";
-    
-    let recLP = "";
-    let recEEG = "";
-    let recImage = "";
-    let epilepsyRisk = "";
+  const round1 = x => Math.round(x * 10) / 10;
 
-    // 1. 優先排除中樞神經感染 / 非典型年齡
-    if (isMeningitis) {
-      classification = "🚨 高度懷疑中樞神經感染 (Suspected CNS Infection)";
-      classBoxStyle = "type-danger";
-      recLP = "<strong>強烈建議執行 (Strongly Recommended)</strong>。需排除腦膜炎/腦炎，建議同步經驗性抗生素治療。";
-      recEEG = "視發作是否持續或懷疑非痙攣性重積狀態 (NCSE) 而定。";
-      recImage = "若有局部神經學異常或腦壓增高徵象，建議先做 CT/MRI 再行 LP。";
-      epilepsyRisk = "取決於感染造成的腦部損傷程度。";
-    } else if (age === "under6" || age === "over60") {
-      classification = "⚠️ 非典型年齡之痙攣 (Atypical Age for Febrile Seizure)";
-      classBoxStyle = "type-complex";
-      recLP = age === "under6" ? "強烈建議執行 (年紀極小，感染表徵常不明顯)。" : "視臨床懷疑而定。";
-      recEEG = "建議安排以排除其他癲癇症候群。";
-      recImage = "需高度懷疑腦部結構異常或佔位性病變，建議安排 CT/MRI。";
-      epilepsyRisk = "需進一步由小兒神經科評估。";
-    } 
-    // 2. 判斷 單純型 vs 複雜型
-    else {
-      const isComplex = (duration === 1 || type === 1 || recurrence === 1);
-      
-      if (isComplex) {
-        classification = "⚠️ 複雜型熱性痙攣 (Complex Febrile Seizure)";
-        classBoxStyle = "type-complex";
-        
-        // LP 建議 (依據年齡)
-        if (age === "6to12") {
-          recLP = "<strong>建議考慮 (Consider)</strong>。特別是若未完整接種 Hib 或肺炎鏈球菌疫苗的病童。";
-        } else {
-          recLP = "常規不建議。除非臨床出現腦膜炎徵候。";
-        }
-        
-        recEEG = "<strong>建議安排門診追蹤腦波</strong>，以排除潛在神經學異常或局部放電。";
-        recImage = "若病童神經學檢查有局部異常(如單側無力、Todd's paralysis) 或巨腦症，建議安排 MRI。";
-        epilepsyRisk = "約 5 - 10% (高於一般人群)。若合併神經發展遲緩或家族史，風險更高。";
-      } else {
-        classification = "✅ 單純型熱性痙攣 (Simple Febrile Seizure)";
-        classBoxStyle = "type-simple";
-        
-        if (age === "6to12") {
-          recLP = "建議考慮。特別是若未完整接種疫苗或曾事先使用抗生素(可能掩蓋症狀)的病童。";
-        } else {
-          recLP = "常規不需執行 (Not routinely recommended)。";
-        }
-        
-        recEEG = "不需執行。健康病童單純型發作不建議常規排 EEG。";
-        recImage = "不需執行。單純型發作無安排 CT/MRI 之適應症。";
-        epilepsyRisk = "約 1 - 2% (與一般健康兒童發生癲癇的機率幾乎相同)。";
-      }
+  function rescueDoses(weight) {
+    if (!(weight > 0)) return null;
+    return {
+      diazepamPR: round1(Math.min(0.5 * weight, 20)),   // 0.2–0.5 mg/kg，max 20 mg
+      midazolamIN: round1(Math.min(0.2 * weight, 10)),  // 0.2 mg/kg，max 10 mg
+      midazolamBuccal: round1(Math.min(0.5 * weight, 10)), // 0.5 mg/kg，max 10 mg
+      midazolamIM: weight >= 40 ? 10 : (weight >= 13 ? 5 : round1(0.2 * weight)),
+      lorazepamIV: round1(Math.min(0.1 * weight, 4)),   // 0.1 mg/kg，max 4 mg
+      diazepamIV: round1(Math.min(0.15 * weight, 10))   // 0.15–0.2 mg/kg，max 10 mg
+    };
+  }
+
+  function evaluate(i) {
+    const errors = [];
+    const age = i.ageMo;
+    if (age === null || age === undefined || age === '' || !isFinite(age)) {
+      return { valid: false, errors: ['請輸入年齡（月）'] };
+    }
+    if (age < 0 || age > 216) errors.push('年齡需介於 0–216 個月');
+    if (i.weight !== null && i.weight !== undefined && i.weight !== '' && !(i.weight > 0 && i.weight <= 150)) errors.push('體重需介於 0–150 kg');
+    if (errors.length) return { valid: false, errors };
+
+    const prolonged = i.duration === '15to29' || i.duration === 'ge30';
+    const fse = i.duration === 'ge30';
+    const focal = i.type === 'focal';
+    const multiple = i.recurrence === 2 || i.recurrence === '2';
+
+    const complexReasons = [];
+    if (prolonged) complexReasons.push(fse ? '持續 ≥ 30 分鐘（熱性重積）' : '持續 ≥ 15 分鐘');
+    if (focal) complexReasons.push('局部性發作');
+    if (multiple) complexReasons.push('24 小時內 ≥ 2 次');
+    if (i.focalDeficit) complexReasons.push('發作後局部神經缺損');
+
+    const isCNS = !!(i.meningeal || i.toxic);
+    const infant = age < 6;
+    const older = age >= 60;
+    const notFS = !!i.afebrilePrior;
+
+    // ---- 分類 ----
+    let key, label, style;
+    if (isCNS) { key = 'cns'; label = '🚨 高度懷疑中樞神經感染 / 敗血症'; style = 'type-danger'; }
+    else if (notFS) { key = 'notFS'; label = '⚠️ 曾有無熱發作：不符熱性痙攣定義，依癲癇評估'; style = 'type-complex'; }
+    else if (infant) { key = 'infant'; label = '⚠️ 非典型年齡（< 6 個月）之發燒合併痙攣'; style = 'type-danger'; }
+    else if (older) { key = 'older'; label = '⚠️ 非典型年齡（≥ 5 歲）之發燒合併痙攣'; style = 'type-complex'; }
+    else if (fse) { key = 'fse'; label = '⚠️ 熱性重積狀態 (Febrile Status Epilepticus)'; style = 'type-danger'; }
+    else if (complexReasons.length) { key = 'complex'; label = '⚠️ 複雜型熱性痙攣 (Complex Febrile Seizure)'; style = 'type-complex'; }
+    else { key = 'simple'; label = '✅ 單純型熱性痙攣 (Simple Febrile Seizure)'; style = 'type-simple'; }
+
+    const reasons = [];
+    if (complexReasons.length && key !== 'simple') reasons.push('複雜型特徵：' + complexReasons.join('、'));
+    if (i.notBaseline) reasons.push('意識未恢復至基準 → 不宜以單純型處理，須排除腦炎/腦膜炎、NCSE、代謝異常');
+    if (key === 'simple') reasons.push('全身性、< 15 分鐘、24 小時內僅 1 次，且無紅旗');
+    const isFSClass = ['simple', 'complex', 'fse'].includes(key);
+
+    // ---- 腰椎穿刺 ----
+    let lp;
+    const lpOptions = [];
+    if (age >= 6 && age < 12 && i.vaxIncomplete) lpOptions.push('6–12 個月且 Hib/肺炎鏈球菌疫苗未完成或不詳');
+    if (i.abxPretreated) lpOptions.push('已使用抗生素（腦膜炎表現可能被掩蓋）');
+    if (isCNS) {
+      lp = { level: 'must', text: '強烈建議執行。若有局部神經缺損、顱內壓增高或意識明顯下降，先做 CT 再 LP；<strong>勿因檢查延誤經驗性抗生素（± acyclovir）</strong>。' };
+    } else if (infant) {
+      lp = { level: 'must', text: '強烈建議。< 6 個月感染表徵不明顯，且不在熱性痙攣年齡範圍，應完整敗血症評估（含 CSF）。' };
+    } else if (i.notBaseline) {
+      lp = { level: 'consider', text: '應考慮執行：發作後意識遲遲未恢復，須排除腦膜炎/腦炎。' + (lpOptions.length ? '另有：' + lpOptions.join('；') + '。' : '') };
+    } else if (lpOptions.length) {
+      lp = { level: 'option', text: 'AAP 列為「可考慮」(option)：' + lpOptions.join('；') + '。' };
+    } else if (fse) {
+      lp = { level: 'option', text: '依臨床判斷考慮；FEBSTAT 顯示熱性重積 CSF 細胞增多罕見，但需排除感染性腦炎。' };
+    } else if (older) {
+      lp = { level: 'option', text: '依臨床懷疑；≥ 5 歲腦膜炎徵候通常可靠，無徵候者不需常規 LP。' };
+    } else {
+      lp = { level: 'no', text: '不需常規執行（無腦膜徵候、意識已恢復、疫苗完整、未先用抗生素）。' };
     }
 
-    // 更新 UI
-    const resClassBox = document.getElementById('resClassBox');
-    resClassBox.className = `result-box text-center ${classBoxStyle}`;
-    document.getElementById('resClassification').innerText = classification;
+    // ---- EEG ----
+    let eeg;
+    if (i.notBaseline) eeg = { level: 'consider', text: '意識持續未恢復 → 考慮<strong>緊急 EEG</strong> 排除非痙攣性重積 (NCSE)。' };
+    else if (key === 'simple') eeg = { level: 'no', text: '不需執行。神經學正常的單純型熱性痙攣不建議 EEG（AAP 2011）。' };
+    else if (key === 'fse') eeg = { level: 'consider', text: '建議安排 EEG（FEBSTAT：熱性重積後 72 小時內 EEG 異常常見）並轉介小兒神經科。' };
+    else if (key === 'complex') {
+      eeg = (focal || i.focalDeficit || i.neuroHx)
+        ? { level: 'option', text: '不需急診執行；局部型或合併神經學異常 → 轉介小兒神經科，安排非緊急 EEG。' }
+        : { level: 'no', text: '不需常規或急診執行（EEG 不能預測復發或癲癇）；可轉介小兒神經科門診追蹤。' };
+    } else if (key === 'notFS' || key === 'older') eeg = { level: 'consider', text: '建議安排 EEG 並轉介小兒神經科，評估潛在癲癇症候群。' };
+    else eeg = { level: 'defer', text: '待感染評估與穩定後，依臨床由小兒神經科決定。' };
 
-    document.getElementById('resLP').innerHTML = recLP;
-    document.getElementById('resEEG').innerHTML = recEEG;
-    document.getElementById('resImage').innerHTML = recImage;
+    // ---- 影像 ----
+    let image;
+    if (i.focalDeficit) image = { level: 'must', text: '持續局部缺損或顱內壓增高 → <strong>緊急 CT</strong>（或 MRI），排除出血、膿瘍、佔位性病變。' };
+    else if (key === 'simple') image = { level: 'no', text: '不需執行。單純型熱性痙攣無 CT/MRI 適應症（AAP 2011）。' };
+    else if (key === 'fse') image = { level: 'option', text: '建議 MRI（可非緊急安排），FEBSTAT 顯示部分病童海馬迴 T2 異常。' };
+    else if (key === 'complex') image = focal || i.neuroHx
+      ? { level: 'option', text: '不需緊急影像；局部發作或神經學/發展異常 → 非緊急 MRI。' }
+      : { level: 'no', text: '不需常規影像（神經學檢查正常的複雜型，急診 CT 陽性率極低）。' };
+    else if (key === 'cns') image = { level: 'defer', text: '有局部徵象、顱內壓增高或意識明顯下降時，LP 前先做 CT。' };
+    else if (key === 'infant') image = { level: 'defer', text: '依神經學檢查、頭圍與前囟門決定；有局部徵象時安排影像。' };
+    else image = { level: 'option', text: '依神經學檢查；局部發作或異常理學檢查 → MRI。' };
 
-    const eduUl = document.getElementById('resEdu');
-    eduUl.innerHTML = `
-      <li><strong>再次熱性痙攣機率：</strong> 約 30-35% (若初次發作小於 1 歲則高達 50%)。</li>
-      <li><strong>未來發展為癲癇機率：</strong> ${epilepsyRisk}</li>
-      <li><strong>居家急救 SOP：</strong> 保持側躺防嗆、勿塞物入嘴。若發作 > 5 分鐘請立即撥打 119。</li>
-    `;
+    // ---- 檢驗 ----
+    let labs;
+    if (infant || isCNS) labs = '完整敗血症評估：CBC/DC、CRP、血液培養、尿液分析與培養、血糖、電解質（含鈣、鎂）。';
+    else if (i.notBaseline || fse) labs = '床邊血糖（POCT）、電解質（Na、Ca、Mg）；並依年齡與症狀尋找發燒原因。';
+    else labs = '不需常規 CBC、電解質、血鈣、血糖；依年齡與臨床尋找發燒原因（如 < 2 歲無明顯病灶時考慮尿液檢查）。嘔吐腹瀉脫水者再驗電解質。';
 
-    // 儲存列印資料
-    const ageText = document.getElementById("ageGroup").options[document.getElementById("ageGroup").selectedIndex].text;
-    const durText = document.getElementById("duration").options[document.getElementById("duration").selectedIndex].text;
-    const typeText = document.getElementById("type").options[document.getElementById("type").selectedIndex].text;
-    const recText = document.getElementById("recurrence").options[document.getElementById("recurrence").selectedIndex].text;
-    const menText = isMeningitis ? "有" : "無";
+    // ---- 去向 ----
+    let dispo;
+    if (isCNS || infant || fse || i.notBaseline || i.focalDeficit) dispo = '住院（必要時加護病房），持續監測意識與生命徵象。';
+    else if (key === 'complex') dispo = '留觀至完全恢復基準；多次發作或局部型可考慮住院觀察。';
+    else if (key === 'notFS' || key === 'older') dispo = '恢復基準且無紅旗可門診追蹤，須小兒神經科評估。';
+    else dispo = '恢復至基準、發燒原因可處理 → 可出院，給予家屬衛教。';
 
-    latestData = {
-      ageText, durText, typeText, recText, menText,
-      classification, classBoxStyle,
-      recLP: recLP.replace(/<[^>]*>?/gm, ''), // 移除HTML標籤供列印
-      recEEG: recEEG.replace(/<[^>]*>?/gm, ''),
-      recImage: recImage.replace(/<[^>]*>?/gm, ''),
-      epilepsyRisk
+    // ---- 復發 ----
+    let recur = null;
+    if (isFSClass) {
+      const factors = [];
+      if (age < 18) factors.push('初次發作 < 18 個月');
+      if (i.famFS) factors.push('一等親熱性痙攣史');
+      if (i.tempLt40) factors.push('發作時體溫 < 40°C');
+      if (i.feverLt1h) factors.push('發燒 < 1 小時即發作');
+      recur = { n: factors.length, pct: RECUR_PCT[factors.length], factors };
+    }
+
+    // ---- 癲癇風險 ----
+    let epi;
+    const epiFactors = [];
+    if (complexReasons.length) epiFactors.push('複雜型特徵');
+    if (i.neuroHx) epiFactors.push('神經發展異常');
+    if (i.famEpilepsy) epiFactors.push('癲癇家族史');
+    if (i.feverLt1h) epiFactors.push('發燒 < 1 小時即發作');
+    if (!isFSClass) epi = { text: '需由小兒神經科依病因評估。', factors: epiFactors };
+    else if (!epiFactors.length) epi = { text: '約 1–2%（一般兒童約 0.5–1%），僅略高。', factors: epiFactors };
+    else {
+      const allThree = prolonged && focal && multiple;
+      epi = {
+        text: allThree
+          ? '明顯升高：延長、局部、反覆三項兼具者，成年前無熱發作風險可達約 49%（Annegers 1987）。'
+          : (epiFactors.length >= 2 ? '升高，約 5–10% 或更高（多項危險因子）。' : '約 2–5%（一項危險因子）。'),
+        factors: epiFactors
+      };
+    }
+
+    // ---- 急救用藥 ----
+    const doses = rescueDoses(i.weight);
+    const highRecur = recur && recur.pct >= 62;
+    const offerRescue = !!(i.ongoing || prolonged || highRecur);
+    const rescue = {
+      offer: offerRescue,
+      text: i.ongoing
+        ? '立即給藥：院前或無 IV 時用 diazepam 肛門塞劑 / midazolam 鼻內、頰黏膜或肌注；有 IV 時用 lorazepam 或 diazepam IV。5 分鐘未止可重複一次，仍持續則進入第二線（levetiracetam / fosphenytoin / valproate）。'
+        : offerRescue
+          ? '建議開立居家急救藥（AAP 2008：曾有延長發作或高復發風險、離醫療院所遠者可考慮），並教導家屬：發作 ≥ 5 分鐘才給藥並撥 119。'
+          : '一般不需開立。不建議長期或發燒時間歇性預防性抗癲癇藥（AAP 2008）；退燒藥不能預防復發。',
+      doses
     };
 
-    document.getElementById('printBtn').disabled = false;
+    return {
+      valid: true, key, label, style, reasons, complexReasons,
+      ongoing: !!i.ongoing, isFSClass,
+      lp, eeg, image, labs, dispo, recur, epi, rescue
+    };
+  }
+
+  return { evaluate, rescueDoses, RECUR_PCT };
+})();
+if (typeof module !== 'undefined') module.exports = FS;
+/*ENGINE-END*/
+
+  const $ = id => document.getElementById(id);
+  const LVL = { must: '強烈建議', consider: '應考慮', option: '可考慮', no: '不需', defer: '視情況' };
+  const CHECKS = ['ongoing', 'meningeal', 'toxic', 'notBaseline', 'focalDeficit', 'afebrilePrior', 'vaxIncomplete', 'abxPretreated', 'famFS', 'tempLt40', 'feverLt1h', 'famEpilepsy', 'neuroHx'];
+  let latest = null;
+
+  const num = id => { const v = $(id).value.trim(); return v === '' ? null : Number(v); };
+  const badge = r => `<span class="lvl lvl-${r.level}">${LVL[r.level]}</span>${r.text}`;
+  const strip = s => s.replace(/<[^>]*>/g, '');
+  const selText = id => $(id).options[$(id).selectedIndex].text;
+
+  function readInput() {
+    const o = { ageMo: num('ageMo'), weight: num('weight'), duration: $('duration').value, type: $('type').value, recurrence: Number($('recurrence').value) };
+    CHECKS.forEach(k => { o[k] = $(k).checked; });
+    return o;
+  }
+
+  function ageLabel(m) {
+    if (m === null) return '';
+    const y = Math.floor(m / 12), r = m % 12;
+    return y ? `${y} 歲${r ? ' ' + r + ' 個月' : ''}` : `${m} 個月`;
+  }
+
+  function doseHtml(d) {
+    if (!d) return '<div class="text-muted small mt-1">輸入體重以計算劑量。</div>';
+    return `<ul class="small mt-2 mb-0">
+      <li>Diazepam 肛門塞劑 0.5 mg/kg（max 20 mg）：<strong>${d.diazepamPR} mg</strong>（取最接近規格，如 5 / 10 mg）</li>
+      <li>Midazolam 鼻內 0.2 mg/kg（max 10 mg）：<strong>${d.midazolamIN} mg</strong>；頰黏膜 0.5 mg/kg（max 10 mg）：<strong>${d.midazolamBuccal} mg</strong></li>
+      <li>Midazolam IM（13–40 kg 5 mg；&gt; 40 kg 10 mg）：<strong>${d.midazolamIM} mg</strong></li>
+      <li>有 IV：Lorazepam 0.1 mg/kg（max 4 mg）<strong>${d.lorazepamIV} mg</strong> 或 Diazepam 0.15–0.2 mg/kg（max 10 mg）<strong>${d.diazepamIV} mg</strong></li>
+    </ul>`;
+  }
+
+  function render() {
+    const inp = readInput();
+    $('ageHint').textContent = inp.ageMo !== null ? `${ageLabel(inp.ageMo)}；典型年齡 6–60 個月` : '熱性痙攣典型年齡 6–60 個月';
+    $('seBanner').classList.toggle('d-none', !inp.ongoing);
+    const r = FS.evaluate(inp);
+    latest = r.valid ? { r, inp } : null;
+    $('printBtn').disabled = !r.valid;
+
+    if (!r.valid) {
+      $('resClassBox').className = 'result-box text-center';
+      $('resClassification').textContent = r.errors.join('；');
+      $('resReasons').textContent = '';
+      ['resLP', 'resEEG', 'resImage', 'resLabs', 'resDispo', 'resRescue'].forEach(id => { $(id).textContent = '--'; });
+      $('resEdu').innerHTML = '<li>--</li>';
+      return;
+    }
+
+    $('resClassBox').className = `result-box text-center ${r.style}`;
+    $('resClassification').textContent = r.label;
+    $('resReasons').innerHTML = r.reasons.map(x => `<div>${x}</div>`).join('');
+    $('boxLP').className = 'result-box' + (r.lp.level === 'must' ? ' border-danger' : '');
+    $('resLP').innerHTML = badge(r.lp);
+    $('resEEG').innerHTML = badge(r.eeg);
+    $('resImage').innerHTML = badge(r.image);
+    $('resLabs').textContent = r.labs;
+    $('resDispo').textContent = r.dispo;
+    $('resRescue').innerHTML = `<div>${r.rescue.text}</div>` + ((r.rescue.offer || inp.ongoing) ? doseHtml(r.rescue.doses) : '');
+
+    const recurLi = r.recur
+      ? `約 <strong>${r.recur.pct}%</strong>（Berg 危險因子 ${r.recur.n}/4${r.recur.n ? '：' + r.recur.factors.join('、') : ''}）。多數再發在 1 年內。`
+      : '不適用（非典型熱性痙攣）。';
+    const epiLi = r.epi.text + (r.epi.factors.length ? `（危險因子：${r.epi.factors.join('、')}）` : '');
+    $('resEdu').innerHTML = `
+      <li><strong>再次熱性痙攣機率：</strong> ${recurLi}</li>
+      <li><strong>日後發展為癲癇機率：</strong> ${epiLi}</li>
+      <li><strong>退燒藥與預防用藥：</strong> 退燒藥可改善不適但不能預防再發；不建議長期抗癲癇藥。</li>
+      <li><strong>居家急救 SOP：</strong> 側躺防嗆、勿塞物入嘴、記錄時間（可錄影）。發作 &gt; 5 分鐘、呼吸困難或叫不醒請立即撥打 119。</li>`;
+    latest.recurText = strip(recurLi);
+    latest.epiText = epiLi;
+  }
+
+  function fillPrint() {
+    if (!latest) return;
+    const { r, inp } = latest;
+    $('prtDateTime').textContent = new Date().toLocaleString('zh-TW');
+    $('prtAge').textContent = ageLabel(inp.ageMo) + (inp.weight ? ` / ${inp.weight} kg` : '');
+    const feats = [
+      '發作持續時間：' + selText('duration'),
+      '發作型態：' + selText('type'),
+      '24 小時內次數：' + selText('recurrence')
+    ];
+    const flags = CHECKS.filter(k => inp[k] && !['famFS', 'tempLt40', 'feverLt1h', 'famEpilepsy', 'neuroHx', 'vaxIncomplete', 'abxPretreated'].includes(k))
+      .map(k => strip(document.querySelector(`label[for="${k}"]`).innerHTML));
+    feats.push('紅旗徵候：' + (flags.length ? flags.join('；') : '無'));
+    $('prtFeatures').innerHTML = feats.map(f => `<li>${f}</li>`).join('');
+    $('prtClassBox').className = `print-box ${r.style}`;
+    $('prtClassification').textContent = r.label;
+    $('prtLP').textContent = `【${LVL[r.lp.level]}】` + strip(r.lp.text);
+    $('prtEEG').textContent = `【${LVL[r.eeg.level]}】` + strip(r.eeg.text);
+    $('prtImage').textContent = `【${LVL[r.image.level]}】` + strip(r.image.text);
+    $('prtLabs').textContent = r.labs;
+    $('prtDispo').textContent = r.dispo;
+    const d = r.rescue.doses;
+    $('prtRescue').textContent = r.rescue.text + ((r.rescue.offer && d) ? `（Diazepam 肛門塞劑 ${d.diazepamPR} mg；Midazolam 鼻內 ${d.midazolamIN} mg）` : '');
+    $('prtRecur').textContent = latest.recurText;
+    $('prtEpilepsyRisk').textContent = latest.epiText;
   }
 
   function printOrder() {
-    if (!latestData) return;
-    
-    document.getElementById('prtDateTime').innerText = new Date().toLocaleString('zh-TW');
-    document.getElementById('prtAge').innerText = latestData.ageText;
-    
-    document.getElementById('prtDuration').innerText = latestData.durText;
-    document.getElementById('prtType').innerText = latestData.typeText;
-    document.getElementById('prtRecurrence').innerText = latestData.recText;
-    document.getElementById('prtMeningitis').innerText = latestData.menText;
-
-    const prtClassBox = document.getElementById('prtClassBox');
-    prtClassBox.className = `print-box ${latestData.classBoxStyle}`;
-    document.getElementById('prtClassification').innerText = latestData.classification;
-
-    document.getElementById('prtLP').innerText = latestData.recLP;
-    document.getElementById('prtEEG').innerText = latestData.recEEG;
-    document.getElementById('prtImage').innerText = latestData.recImage;
-    
-    document.getElementById('prtEpilepsyRisk').innerText = latestData.epilepsyRisk;
-
+    if (!latest) return;
+    fillPrint();
     window.print();
+  }
+
+  function setForm(v) {
+    $('ageMo').value = v.ageMo ?? '';
+    $('weight').value = v.weight ?? '';
+    $('duration').value = v.duration || 'lt15';
+    $('type').value = v.type || 'gen';
+    $('recurrence').value = String(v.recurrence || 1);
+    CHECKS.forEach(k => { $(k).checked = !!v[k]; });
+  }
+
+  $('seizureForm').addEventListener('input', () => { $('sampleNote').classList.add('d-none'); render(); });
+  $('seizureForm').addEventListener('change', render);
+  $('printBtn').addEventListener('click', printOrder);
+  $('sampleBtn').addEventListener('click', () => {
+    setForm({ ageMo: 18, weight: 11, duration: 'lt15', type: 'gen', recurrence: 1 });
+    render();
+    $('sampleNote').classList.remove('d-none');
+  });
+  $('resetBtn').addEventListener('click', () => { setForm({}); $('sampleNote').classList.add('d-none'); render(); });
+  window.addEventListener('beforeprint', fillPrint); // 直接以 Ctrl+P 列印時也填入資料
+  render();
+
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
   }
 </script>
 
