@@ -36,6 +36,54 @@
     .type-danger { background-color: #f8d7da; border-color: #842029; color: #842029; }
     .type-simple .result-value, .type-complex .result-value, .type-danger .result-value { color: inherit; }
 
+    /* 分頁與教學內容 */
+    .tab-nav .nav-link { background-color: #fff; border: 1px solid #dee2e6; color: #8a4300; }
+    .tab-nav .nav-link.active { background-color: #b85a00; border-color: #b85a00; color: #fff; }
+    .btn-fs { background-color: #b85a00; border-color: #b85a00; color: #fff; }
+    .btn-fs:hover, .btn-fs:focus { background-color: #8a4300; border-color: #8a4300; color: #fff; }
+    .btn-fs-outline { background-color: #fff; border-color: #b85a00; color: #8a4300; }
+    .btn-fs-outline:hover, .btn-fs-outline:focus { background-color: #fff3e6; border-color: #8a4300; color: #8a4300; }
+    .case-meta { font-size: 0.85rem; color: #6c757d; }
+    .case-q { background-color: #fff3e6; border-left: 4px solid #fd7e14; padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 12px 0; }
+    .case-output { background-color: #f8f9fa; border-radius: 8px; padding: 12px 14px; font-size: 0.92rem; }
+    .case-output dl { display: grid; grid-template-columns: max-content 1fr; gap: 3px 14px; margin: 0; }
+    .case-output dt { font-weight: 600; color: #495057; }
+    .case-output dd { margin: 0; }
+    .case-step { margin: 10px 0 0; }
+    .case-step strong { display: block; color: #8a4300; }
+    .case-pit { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 8px 12px; border-radius: 0 8px 8px 0; margin-top: 12px; font-size: 0.92rem; }
+    .case-src, .quiz-src { font-size: 0.8rem; color: #6c757d; margin-top: 8px; }
+    details > summary { cursor: pointer; font-weight: 600; color: #8a4300; margin-top: 8px; }
+    .quiz-bar { position: sticky; top: 0; z-index: 5; background-color: #f8f9fa; padding: 8px 0; margin-bottom: 8px; }
+    .quiz-opt { display: block; width: 100%; text-align: left; background-color: #fff; border: 1px solid #ced4da; border-radius: 8px; padding: 9px 12px; margin-bottom: 6px; color: #212529; }
+    .quiz-opt:hover:enabled { background-color: #fff3e6; border-color: #fd7e14; }
+    .quiz-opt:disabled { color: #212529; opacity: 1; }
+    .quiz-opt.right { background-color: #d1e7dd; border-color: #198754; font-weight: 600; }
+    .quiz-opt.wrong { background-color: #f8d7da; border-color: #dc3545; }
+    .quiz-exp { background-color: #f8f9fa; border-radius: 8px; padding: 10px 12px; margin-top: 8px; font-size: 0.93rem; }
+    .mm-root { display: inline-block; background-color: #212529; color: #fff; font-weight: 700; border-radius: 10px; padding: 10px 18px; }
+    .mm-branches { margin: 14px 0 0 18px; padding-left: 24px; }
+    .mm-branch { position: relative; display: grid; grid-template-columns: 190px 1fr; gap: 26px; padding: 8px 0; }
+    .mm-branch::before { content: ''; position: absolute; left: -24px; top: 28px; width: 24px; border-top: 2px solid #adb5bd; }
+    .mm-branch::after { content: ''; position: absolute; left: -24px; top: 0; bottom: 0; border-left: 2px solid #adb5bd; }
+    .mm-branch:last-child::after { bottom: auto; height: 28px; }
+    .mm-head { position: relative; align-self: start; width: 100%; min-height: 40px; border: 0; border-radius: 8px; padding: 8px 10px; color: #fff; font-weight: 700; text-align: left; background-color: var(--mm); }
+    .mm-head::after { content: '▾'; float: right; }
+    .mm-head[aria-expanded="false"]::after { content: '▸'; }
+    .mm-leaves { list-style: none; margin: 0; padding: 0 0 0 16px; border-left: 3px solid var(--mm); }
+    .mm-leaves li { background-color: #fff; border: 1px solid #dee2e6; border-radius: 8px; padding: 6px 10px; margin-bottom: 6px; font-size: 0.92rem; }
+    .mm-leaves li b { color: var(--mm); }
+    .mm-tag { font-size: 0.72rem; color: #6c757d; white-space: nowrap; margin-left: 4px; }
+    @media (max-width: 767.98px) {
+      .mm-branches { margin-left: 6px; padding-left: 16px; }
+      .mm-branch { grid-template-columns: 1fr; gap: 6px; }
+      .mm-branch::before { left: -16px; width: 16px; top: 28px; }
+      .mm-branch::after { left: -16px; }
+      .mm-tag { white-space: normal; }
+      .case-output dl { grid-template-columns: 1fr; }
+      .case-output dt { margin-top: 4px; }
+    }
+
     /* 列印專屬樣式 */
     @media print {
       .d-print-none { display: none !important; }
@@ -54,8 +102,20 @@
 
 <div class="container py-4 d-print-none">
   <h2 class="text-center mb-1" style="color: #fd7e14;">小兒熱性痙攣評估與決策路徑</h2>
-  <p class="text-center text-muted small mb-4">AAP 2011 單純型熱性痙攣神經診斷評估 · AAP 2008 長期處置 · v2.0</p>
+  <p class="text-center text-muted small mb-3">AAP 2011 單純型熱性痙攣神經診斷評估 · AAP 2008 長期處置 · v2.1</p>
 
+  <ul class="nav nav-pills tab-nav justify-content-center gap-2 mb-4" id="tabNav">
+    <li class="nav-item"><a class="nav-link active" href="#tool" data-view="tool" aria-current="page">評估工具</a></li>
+    <li class="nav-item"><a class="nav-link" href="#cases" data-view="cases">示範病例</a></li>
+    <li class="nav-item"><a class="nav-link" href="#quiz" data-view="quiz">考題</a></li>
+    <li class="nav-item"><a class="nav-link" href="#map" data-view="map">心智圖</a></li>
+  </ul>
+
+  <div id="view-cases" hidden></div>
+  <div id="view-quiz" hidden></div>
+  <div id="view-map" hidden></div>
+
+  <div id="view-tool">
   <div class="row">
     <!-- 左側輸入區 -->
     <div class="col-md-5">
@@ -271,6 +331,7 @@
       <p class="mb-0 text-muted">本工具僅供醫療專業人員快速參考與衛教輔助，不能取代醫師的臨床判斷與完整神經學檢查。單純型熱性痙攣的診斷以「已排除中樞神經感染」為前提；觀察期間若出現意識未恢復、持續昏睡或頸部僵硬等表現，應隨時推翻原判斷並啟動腰椎穿刺與經驗性抗生素治療。藥物劑量請依院內規範與最新仿單核對。</p>
     </div>
   </div>
+  </div>
 </div>
 
 <!-- ================= 列印專屬區塊 ================= -->
@@ -344,7 +405,7 @@ const FS = (() => {
       diazepamPR: round1(Math.min(0.5 * weight, 20)),   // 0.2–0.5 mg/kg，max 20 mg
       midazolamIN: round1(Math.min(0.2 * weight, 10)),  // 0.2 mg/kg，max 10 mg
       midazolamBuccal: round1(Math.min(0.5 * weight, 10)), // 0.5 mg/kg，max 10 mg
-      midazolamIM: weight >= 40 ? 10 : (weight >= 13 ? 5 : round1(0.2 * weight)),
+      midazolamIM: weight > 40 ? 10 : (weight >= 13 ? 5 : round1(0.2 * weight)),
       lorazepamIV: round1(Math.min(0.1 * weight, 4)),   // 0.1 mg/kg，max 4 mg
       diazepamIV: round1(Math.min(0.15 * weight, 10))   // 0.15–0.2 mg/kg，max 10 mg
     };
@@ -373,7 +434,7 @@ const FS = (() => {
 
     const isCNS = !!(i.meningeal || i.toxic);
     const infant = age < 6;
-    const older = age >= 60;
+    const older = age > 60; // AAP 2011：6 through 60 個月
     const notFS = !!i.afebrilePrior;
 
     // ---- 分類 ----
@@ -381,7 +442,7 @@ const FS = (() => {
     if (isCNS) { key = 'cns'; label = '🚨 高度懷疑中樞神經感染 / 敗血症'; style = 'type-danger'; }
     else if (notFS) { key = 'notFS'; label = '⚠️ 曾有無熱發作：不符熱性痙攣定義，依癲癇評估'; style = 'type-complex'; }
     else if (infant) { key = 'infant'; label = '⚠️ 非典型年齡（< 6 個月）之發燒合併痙攣'; style = 'type-danger'; }
-    else if (older) { key = 'older'; label = '⚠️ 非典型年齡（≥ 5 歲）之發燒合併痙攣'; style = 'type-complex'; }
+    else if (older) { key = 'older'; label = '⚠️ 非典型年齡（> 60 個月）之發燒合併痙攣'; style = 'type-complex'; }
     else if (fse) { key = 'fse'; label = '⚠️ 熱性重積狀態 (Febrile Status Epilepticus)'; style = 'type-danger'; }
     else if (complexReasons.length) { key = 'complex'; label = '⚠️ 複雜型熱性痙攣 (Complex Febrile Seizure)'; style = 'type-complex'; }
     else { key = 'simple'; label = '✅ 單純型熱性痙攣 (Simple Febrile Seizure)'; style = 'type-simple'; }
@@ -403,12 +464,12 @@ const FS = (() => {
       lp = { level: 'must', text: '強烈建議。< 6 個月感染表徵不明顯，且不在熱性痙攣年齡範圍，應完整敗血症評估（含 CSF）。' };
     } else if (i.notBaseline) {
       lp = { level: 'consider', text: '應考慮執行：發作後意識遲遲未恢復，須排除腦膜炎/腦炎。' + (lpOptions.length ? '另有：' + lpOptions.join('；') + '。' : '') };
+    } else if (fse) {
+      lp = { level: 'consider', text: '應考慮執行（AFP 2019：熱性重積應促使做 LP）。FEBSTAT 顯示熱性重積很少造成 CSF 細胞增多，若有增多不可歸因於抽搐。' + (lpOptions.length ? '另有：' + lpOptions.join('；') + '。' : '') };
     } else if (lpOptions.length) {
       lp = { level: 'option', text: 'AAP 列為「可考慮」(option)：' + lpOptions.join('；') + '。' };
-    } else if (fse) {
-      lp = { level: 'option', text: '依臨床判斷考慮；FEBSTAT 顯示熱性重積 CSF 細胞增多罕見，但需排除感染性腦炎。' };
     } else if (older) {
-      lp = { level: 'option', text: '依臨床懷疑；≥ 5 歲腦膜炎徵候通常可靠，無徵候者不需常規 LP。' };
+      lp = { level: 'option', text: '依臨床懷疑；> 60 個月腦膜炎徵候通常可靠，無徵候者不需常規 LP。' };
     } else {
       lp = { level: 'no', text: '不需常規執行（無腦膜徵候、意識已恢復、疫苗完整、未先用抗生素）。' };
     }
@@ -471,10 +532,12 @@ const FS = (() => {
     if (!isFSClass) epi = { text: '需由小兒神經科依病因評估。', factors: epiFactors };
     else if (!epiFactors.length) epi = { text: '約 1–2%（一般兒童約 0.5–1%），僅略高。', factors: epiFactors };
     else {
-      const allThree = prolonged && focal && multiple;
+      // Annegers 1987：複雜特徵數（延長、局部、反覆）；發作後局部缺損視同局部
+      const nComplex = [prolonged, focal || i.focalDeficit, multiple].filter(Boolean).length;
+      const ANNEGERS = ['', '約 6–8%（一項複雜特徵）', '約 17–22%（兩項複雜特徵）', '約 49%（延長、局部、反覆三項兼具）'];
       epi = {
-        text: allThree
-          ? '明顯升高：延長、局部、反覆三項兼具者，成年前無熱發作風險可達約 49%（Annegers 1987）。'
+        text: nComplex
+          ? `至 25 歲無熱發作風險${ANNEGERS[nComplex]}（Annegers 1987）。`
           : (epiFactors.length >= 2 ? '升高，約 5–10% 或更高（多項危險因子）。' : '約 2–5%（一項危險因子）。'),
         factors: epiFactors
       };
@@ -489,7 +552,7 @@ const FS = (() => {
       text: i.ongoing
         ? '立即給藥：院前或無 IV 時用 diazepam 肛門塞劑 / midazolam 鼻內、頰黏膜或肌注；有 IV 時用 lorazepam 或 diazepam IV。5 分鐘未止可重複一次，仍持續則進入第二線（levetiracetam / fosphenytoin / valproate）。'
         : offerRescue
-          ? '建議開立居家急救藥（AAP 2008：曾有延長發作或高復發風險、離醫療院所遠者可考慮），並教導家屬：發作 ≥ 5 分鐘才給藥並撥 119。'
+          ? '可與家屬討論開立居家急救藥（本工具依延長發作或高復發風險提示；AAP 2008 未訂開立條件，請依就醫距離、照顧者能力與院內規範判斷），並教導家屬：發作 ≥ 5 分鐘才給藥並撥 119。'
           : '一般不需開立。不建議長期或發燒時間歇性預防性抗癲癇藥（AAP 2008）；退燒藥不能預防復發。',
       doses
     };
@@ -505,6 +568,260 @@ const FS = (() => {
 })();
 if (typeof module !== 'undefined') module.exports = FS;
 /*ENGINE-END*/
+
+/*TEACH-START*/
+const TEACH = (() => {
+  var SRC = [
+    { t: 'AAP 2011 神經診斷評估指引，Pediatrics 127:389', u: 'https://doi.org/10.1542/peds.2010-3318', r: '全文' },
+    { t: 'AAP 2008 長期處置指引，Pediatrics 121:1281', u: 'https://doi.org/10.1542/peds.2008-0939', r: '全文' },
+    { t: 'Smith 等，Am Fam Physician 2019;99:445', u: 'https://www.aafp.org/pubs/afp/issues/2019/0401/p445.html', r: '全文' },
+    { t: 'Cochrane 預防用藥回顧 2021', u: 'https://doi.org/10.1002/14651858.CD003031.pub4', r: '摘要' },
+    { t: 'Murata 2018，Pediatrics 142:e20181009', u: 'https://doi.org/10.1542/peds.2018-1009', r: '摘要' },
+    { t: 'Kimia 2009（單純型 LP），Pediatrics 123:6', u: 'https://doi.org/10.1542/peds.2007-3424', r: '摘要' },
+    { t: 'Kimia 2010（複雜型 LP），Pediatrics 126:62', u: 'https://doi.org/10.1542/peds.2009-2741', r: '摘要' },
+    { t: 'Kimia 2012（複雜型影像），Pediatr Emerg Care 28:316', u: 'https://doi.org/10.1097/PEC.0b013e31824d8b0b', r: '摘要' },
+    { t: 'Guedj 2017（複雜型 LP），Ann Emerg Med 70:52', u: 'https://doi.org/10.1016/j.annemergmed.2016.11.024', r: '摘要' },
+    { t: 'Annegers 1987，NEJM 316:493', u: 'https://doi.org/10.1056/NEJM198702263160901', r: '摘要' },
+    { t: 'Berg 1997，Arch Pediatr Adolesc Med 151:371', u: 'https://doi.org/10.1001/archpedi.1997.02170410045006', r: '摘要；各因子數的百分比未讀到原表' },
+    { t: 'FEBSTAT MRI，Neurology 2012;79:871', u: 'https://doi.org/10.1212/WNL.0b013e318266fcc5', r: '摘要' },
+    { t: 'FEBSTAT 海馬硬化，Ann Neurol 2014;75:178', u: 'https://doi.org/10.1002/ana.24081', r: '摘要' },
+    { t: 'FEBSTAT EEG，Neurology 2012;79:2180', u: 'https://doi.org/10.1212/WNL.0b013e3182759766', r: '摘要' },
+    { t: 'FEBSTAT CSF，J Pediatr 2012;161:1169', u: 'https://doi.org/10.1016/j.jpeds.2012.08.008', r: '摘要' },
+    { t: 'AES 重積指引 2016，Epilepsy Curr 16:48', u: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC4749120/', r: '內文證據等級；演算法圖中的劑量未重新核對' }
+  ];
+
+  var CASES = [
+    {
+      id: 'c1', title: '典型單純型：把力氣花在找燒', tag: '單純型',
+      who: '20 個月男童，11 kg',
+      story: '流鼻水 2 天，發燒約 3 小時後全身強直陣攣 2 分鐘，到院體溫 39.6°C。到院時已完全清醒、會玩。無腦膜徵候，右耳鼓膜紅腫。疫苗依時程完成，發育正常，未用抗生素，家族史無特殊。',
+      ask: '要做 LP、EEG、抽血或影像嗎？可以回家嗎？家長問「會不會再發作、會不會變癲癇」，怎麼回答？',
+      input: { ageMo: 20, weight: 11, duration: 'lt15', type: 'gen', recurrence: 1, tempLt40: true },
+      expect: { key: 'simple', lp: 'no', eeg: 'no', image: 'no', pct: 23, offer: false },
+      steps: [
+        { h: '分型', t: '全身性、小於 15 分鐘、24 小時內一次，年齡在 6–60 個月內，沒有中樞感染徵象，符合單純型。' },
+        { h: '檢查', t: 'AAP 2011 對神經學正常的單純型明確不做 EEG、不例行抽血、不例行影像（皆為 strong recommendation）。此童發燒來源是中耳炎，檢查方向是找燒的原因，不是解釋抽搐。' },
+        { h: '再發率', t: '四項因子中只中「發作時體溫 <40°C」一項，工具顯示 23%（AFP 2019 表列 24%）。可以直接說「大約四分之一」。' },
+        { h: '癲癇與發展', t: 'Annegers 1987 單純型到 25 歲的無熱發作風險為 2.4%。AAP 2008：沒有證據顯示智力或學習因單純型受損。' },
+        { h: '衛教', t: '退燒藥讓孩子舒服，但不能預防再發。發作時側躺、不塞東西、看時間，超過 5 分鐘撥 119。' }
+      ],
+      pitfall: '「疫苗完整、看起來很好」是判斷的前提。若觀察中開始嗜睡、頸部僵硬，分型要立刻推翻。',
+      src: ['AAP 2011', 'AAP 2008', 'AFP 2019', 'Annegers 1987']
+    },
+    {
+      id: 'c2', title: '9 個月疫苗不全又吃過抗生素', tag: 'LP 是 option',
+      who: '9 個月女嬰，8.5 kg',
+      story: '只打過 2 個月那一劑疫苗。因中耳炎口服 amoxicillin 第 2 天，今天發燒後全身抽搐 3 分鐘，到院體溫 39.2°C。到院 40 分鐘後已恢復活力、會吃奶，前囟門平，無頸部僵硬，無出血點。',
+      ask: '這個孩子一定要做 LP 嗎？AAP 的兩條 option 她各中哪一條？若要做，還要一起送什麼？',
+      input: { ageMo: 9, weight: 8.5, duration: 'lt15', type: 'gen', recurrence: 1, tempLt40: true, vaxIncomplete: true, abxPretreated: true },
+      expect: { key: 'simple', lp: 'option', eeg: 'no', image: 'no', pct: 32, offer: false },
+      steps: [
+        { h: '兩條 option 都成立', t: 'Action 1b：6–12 個月且 Hib 或肺炎鏈球菌疫苗不足或不詳。Action 1c：已用抗生素，可能掩蓋腦膜炎表現。兩條都是 evidence level D。' },
+        { h: 'Option 的意思', t: '不是「應該做」。AAP 定義下，option 是證據有限、家長意願可佔相當份量的選擇。要向家長說明兩邊的風險：LP 是侵入性檢查；不做則有漏掉被掩蓋之腦膜炎的風險。' },
+        { h: '證據的限制', t: 'Kimia 2009 收 6–18 個月首次單純型，260 份 CSF 沒有細菌性腦膜炎。但 AAP 明言未接種或部分接種者的資料缺乏，不能直接套用到她身上。' },
+        { h: '若決定做', t: 'AAP 2011：做 LP 時同時送血液培養與血糖，提高偵測細菌的敏感度，並判斷 CSF 血糖是否偏低。' },
+        { h: '再發率', t: '中「<18 個月」與「體溫 <40°C」兩項，工具顯示 32%（AFP 2019 同為 32%）。' }
+      ],
+      pitfall: '「pretreated」沒有正式定義。AAP 只說可視為發作前數天內任何途徑的全身性抗生素，是否做 LP 依藥物、劑量、療程由醫師判斷。',
+      src: ['AAP 2011', 'Kimia 2009', 'AFP 2019']
+    },
+    {
+      id: 'c3', title: '局部發作，檢查都正常', tag: '複雜型：局部',
+      who: '26 個月女童，12.5 kg',
+      story: '發燒才約 40 分鐘，右手與右臉抽動 4 分鐘，到院體溫 39.1°C。30 分鐘後恢復至平常，神經學檢查正常，右側肌力對稱，無腦膜徵候。疫苗完整，發展正常，未用抗生素。',
+      ask: 'AAP 2011 還能直接套用嗎？要做 LP 和急診 CT 嗎？EEG 與 MRI 怎麼安排？',
+      input: { ageMo: 26, weight: 12.5, duration: 'lt15', type: 'focal', recurrence: 1, feverLt1h: true },
+      expect: { key: 'complex', lp: 'no', eeg: 'option', image: 'option', pct: 23, offer: false },
+      steps: [
+        { h: '指引範圍', t: 'AAP 2011 與 2008 都寫明不適用於複雜型。以下判斷來自世代研究與臨床考量，證據層級不同於指引建議。' },
+        { h: 'LP', t: 'Guedj 2017：630 名檢查不像腦膜炎或腦炎的複雜型，細菌性腦膜炎與 HSV 腦炎皆為 0。Kimia 2010：做 LP 的 340 人中 3 人細菌性腦膜炎（0.9%）。她的條件下工具判為不需常規。' },
+        { h: '急診影像', t: 'Kimia 2012：268 人急診影像，4 人有臨床意義（1.5%），其中 3 人另有明顯異常。她神經學正常，不需急診 CT。' },
+        { h: '門診追蹤', t: '工具將局部型列為「可考慮」非緊急 EEG 與 MRI。AFP 2019 把門診 EEG 留給多項癲癇危險因子者，如發展遲緩、癲癇家族史、超過一項複雜特徵；她只有一項，可與小兒神經科討論。' },
+        { h: '癲癇風險', t: 'Annegers 1987：單一複雜特徵 6–8%。可以告訴家長高於單純型，但多數孩子不會發展成癲癇。' }
+      ],
+      pitfall: '若發作後單側無力持續，或有顱內壓增高徵象，請勾「局部神經缺損」，工具會改為緊急影像。',
+      src: ['AAP 2011', 'Guedj 2017', 'Kimia 2010', 'Kimia 2012', 'AFP 2019', 'Annegers 1987']
+    },
+    {
+      id: 'c4', title: '24 小時兩次：家長要求預防用藥', tag: '複雜型：反覆',
+      who: '15 個月男童，10 kg',
+      story: '流感。8 小時內兩次全身抽搐，各約 2 分鐘，兩次之間意識恢復。體溫最高 39.4°C。爸爸小時候有熱性痙攣。現在清醒，檢查正常，疫苗完整。血鈉 132，住家距醫院約 1 小時車程。家長很焦慮，問能否吃藥預防。',
+      ask: '這算哪一型？再發率多少？預防用藥與居家急救藥有什麼差別？該怎麼回答家長？輸液要注意什麼？',
+      input: { ageMo: 15, weight: 10, duration: 'lt15', type: 'gen', recurrence: 2, famFS: true, tempLt40: true },
+      expect: { key: 'complex', lp: 'no', eeg: 'no', image: 'no', pct: 62, offer: true, diazepamPR: 5 },
+      steps: [
+        { h: '分型與再發率', t: '24 小時內兩次即複雜型。中 <18 個月、家族史、體溫 <40°C 三項，工具顯示 62%（AFP 2019 表列 63%）。' },
+        { h: '預防用藥', t: 'AAP 2008（對象是單純型）不建議連續或間歇抗癲癇藥，理由是毒性大於獲益，也沒有證據能降低日後癲癇。家長焦慮嚴重時，AAP 提到發燒初期間歇口服 diazepam 可能有效。Cochrane 2021：間歇 diazepam 能降再發，但 benzodiazepine 組不良反應可達 36%。' },
+        { h: '居家急救藥', t: '這是另一件事：不是預防，而是發作 5 分鐘未停時給。10 kg 依工具為 diazepam 肛門塞劑 5 mg。工具因高再發率提示可以討論；AAP 2008 只討論其可行與安全性，並未訂出開立條件，是否開立請依距離、照顧者能力與院內規範判斷。' },
+        { h: '鎮靜的代價', t: 'AAP 2008：任何途徑的 benzodiazepine 都可能掩蓋正在進展的中樞感染。給藥後要聯絡醫療人員。' },
+        { h: '血鈉', t: 'AAP 2011：熱性痙攣的孩子血鈉整體偏低，應避免以低張液過度補水。132 不代表要追加高張液，先避免低張。' }
+      ],
+      pitfall: '「反覆」的前提是兩次之間意識恢復。若未恢復，應視為熱性重積，並在工具選「≥ 30 分鐘，或接連發作期間意識未恢復」。',
+      src: ['AAP 2008', 'AAP 2011', 'Cochrane 2021', 'AFP 2019', 'Annegers 1987']
+    },
+    {
+      id: 'c5', title: '40 分鐘的熱性重積', tag: '熱性重積',
+      who: '30 個月男童，13 kg',
+      story: '發燒中左側肢體抽動，家長等待後叫救護車，總計約 40 分鐘，救護人員給 midazolam 肌注後停止。到院體溫 39.0°C。90 分鐘後仍嗜睡，叫得醒但很快睡著。頸部柔軟，疫苗完整，發展正常。',
+      ask: '嗜睡能全怪藥物嗎？LP、EEG、MRI 怎麼排？如果 CSF 白血球升高，可以解釋成抽搐造成的嗎？',
+      input: { ageMo: 30, weight: 13, duration: 'ge30', type: 'focal', recurrence: 1, notBaseline: true, tempLt40: true },
+      expect: { key: 'fse', lp: 'consider', eeg: 'consider', image: 'option', pct: 23, offer: true, midazolamIM: 5 },
+      steps: [
+        { h: '先處理', t: '≥5 分鐘就該給 benzodiazepine，不等到 30 分鐘。AES 2016 將肌注 midazolam 列為可能有效（Level B）。13 kg 依工具為 5 mg，符合他到院前的處置。' },
+        { h: '意識未恢復', t: '不能只歸因於藥物。工具將 LP 列為應考慮，並提示緊急 EEG 排除非痙攣性重積，同時驗血糖與電解質。AFP 2019 更明確：熱性重積應促使做 LP（其引用資料 24 人中 4 人為腦膜炎）。' },
+        { h: 'CSF 判讀', t: 'FEBSTAT：136 例非創傷性 LP，熱性重積很少造成 CSF 細胞增多。白血球升高應視為感染直到證明不是，不要歸因於抽搐本身。' },
+        { h: 'EEG 與 MRI', t: 'FEBSTAT：72 小時內 EEG 異常 45.2%，以局部變慢或衰減為主；MRI 海馬 T2 明確或疑似異常 11.5%。追蹤有急性 T2 異常的 14 人，10 人一年後呈海馬硬化。' },
+        { h: '癲癇風險', t: '他同時有延長與局部兩項特徵，Annegers 1987 為 17–22%。安排小兒神經科追蹤。' }
+      ],
+      pitfall: '即使意識已恢復，工具對熱性重積的 LP 仍列「應考慮」（AFP 2019）。若不做，請記錄理由並密切觀察。',
+      src: ['AES 2016', 'AFP 2019', 'FEBSTAT CSF', 'FEBSTAT EEG', 'FEBSTAT MRI', 'FEBSTAT 2014', 'Annegers 1987']
+    },
+    {
+      id: 'c6', title: '看起來像單純型的腦膜炎', tag: '紅旗',
+      who: '7 個月男嬰，8 kg',
+      story: '發燒 2 天，全身抽搐 3 分鐘。家長以為只是熱性痙攣。到院已 90 分鐘仍昏睡，刺激才哭，前囟門膨出，四肢末梢花斑，下肢有出血點。心跳快。疫苗僅第一劑。',
+      ask: '抽搐的特徵（全身、3 分鐘、一次）能讓你安心嗎？下一步的順序是什麼？LP 前要先做 CT 嗎？',
+      input: { ageMo: 7, weight: 8, duration: 'lt15', type: 'gen', recurrence: 1, meningeal: true, toxic: true, notBaseline: true, vaxIncomplete: true },
+      expect: { key: 'cns', lp: 'must', eeg: 'consider', image: 'defer', pct: null, offer: false },
+      steps: [
+        { h: '不能安心', t: '定義本身就要求沒有中樞感染。AAP 2011 指出約 25% 幼兒腦膜炎以抽搐表現，其中有些到院時昏睡或昏迷，其餘多有明顯徵象，例如出血點或頸部僵硬。' },
+        { h: '順序', t: '先 ABC 與休克處理、血糖、血液培養，立刻給經驗性抗生素，必要時加 acyclovir。不要等檢查。' },
+        { h: 'LP 與影像', t: 'AAP 2011 Action 1a：有腦膜徵候或病史檢查疑似腦膜炎，應做 LP（strong recommendation）。但他意識差、前囟門膨出，又有休克表現，工具提示此時先做 CT 再 LP，且不得因此延誤抗生素。血行不穩定時延後 LP 是臨床判斷。' },
+        { h: '工具如何處理', t: '分類直接跳為「高度懷疑中樞神經感染」，不計算再發率，因為他不應被當成熱性痙攣。' }
+      ],
+      pitfall: '年齡 <6 個月不在定義範圍，即使看起來還好，工具也會要求完整敗血症評估。>60 個月或曾有無熱發作同樣不要直接歸類。',
+      src: ['AAP 2011', 'AFP 2019']
+    }
+  ];
+
+  // a = 正解索引；lv: 'basic' 基礎、'adv' 高階
+  var QUIZ = [
+    { lv: 'basic', q: 'AAP 2011 對熱性痙攣的定義，下列何者正確？',
+      o: ['6–36 個月、肛溫 ≥38.5°C', '6–60 個月、≥38°C、無中樞感染', '3–72 個月、發燒任何程度', '6–60 個月、≥39°C，可有腦膜炎'], a: 1,
+      e: '定義為伴隨發燒（任何測量方式 ≥38°C）、無中樞神經感染，發生於 6 到 60 個月的痙攣。', s: 'AAP 2011' },
+    { lv: 'basic', q: '下列何者屬於複雜型熱性痙攣？',
+      o: ['全身性 12 分鐘，當天一次', '全身性 2 分鐘，半年前也曾發作', '由右手開始的 3 分鐘抽搐', '全身性 5 分鐘，發作後睡 20 分鐘'], a: 2,
+      e: '複雜型是局部、持續 ≥15 分鐘或 24 小時內再發，三者中一項即可。不同發燒病程的再發不算，短暫的發作後嗜睡也不算。', s: 'AAP 2011' },
+    { lv: 'basic', q: '18 個月、疫苗完整、外觀良好、已恢復意識的首次單純型，腰椎穿刺的建議是？',
+      o: ['不需例行執行', '因年齡 <2 歲應做', '首次發作皆應做', '抽血異常才不做'], a: 0,
+      e: 'AAP 2011 認為目前資料不再支持對外觀良好、疫苗完整者例行 LP。', s: 'AAP 2011' },
+    { lv: 'basic', q: '神經學正常的單純型，EEG 與神經影像應如何處理？',
+      o: ['兩者都在一週內安排', '先 EEG，異常才做影像', '先 CT，正常再做 EEG', '都不應在評估中常規執行'], a: 3,
+      e: 'Action 2 與 Action 4 都是 strong recommendation。EEG 無法預測再發或 2 年內的癲癇；CT 有輻射，MRI 可能需要鎮靜。', s: 'AAP 2011' },
+    { lv: 'basic', q: '單純型的抽血策略，何者最符合 AAP 2011？',
+      o: ['例行驗血糖與血鈣', '依發燒來源決定，不為抽搐例行抽血', '一律驗 CBC 預測菌血症', '例行驗血鈉與血鎂'], a: 1,
+      e: 'Action 3：不應只為了找抽搐原因而例行驗電解質、鈣、磷、鎂、血糖或 CBC。檢查方向是找燒。', s: 'AAP 2011' },
+    { lv: 'basic', q: '孩子曾因 MMR 疫苗後發燒出現熱性痙攣，家長問之後還能打疫苗嗎？',
+      o: ['應繼續依時程接種', '所有疫苗永久停打', '改成 5 歲後才接種', '接種前先做腦波'], a: 0,
+      e: 'AFP 2019：MMR 確實略增風險（12–15 個月每萬人約多 4 例），但作者支持照常接種所有常規疫苗。CDC 也不建議接種後例行給退燒藥。', s: 'AFP 2019' },
+    { lv: 'basic', q: '關於退燒藥，對家長最正確的說法是？',
+      o: ['按時吃可預防下次發作', '體溫超過 38°C 就要交替用藥', '可讓孩子舒服，但不能預防再發', '退燒藥會增加痙攣風險'], a: 2,
+      e: 'AAP 2008 結論：退燒藥可改善舒適度，但無法預防熱性痙攣。不論定時或視體溫給藥，結果都相同。', s: 'AAP 2008' },
+    { lv: 'basic', q: '孩子正在抽搐，家長應做的是？',
+      o: ['用湯匙壓住舌頭', '抱緊並壓住四肢', '立刻泡溫水降溫', '讓他側躺、看時間，超過 5 分鐘撥 119'], a: 3,
+      e: '側躺防嗆、移開硬物、不塞東西、不壓肢體。記錄時間，超過 5 分鐘、呼吸困難或叫不醒就撥 119。', s: 'AFP 2019、本工具衛教單' },
+    { lv: 'basic', q: '首次熱性痙攣之後，再次發作的整體機率約為？',
+      o: ['約 5%', '約 1/3', '約 2/3', '幾乎每位都會'], a: 1,
+      e: 'AFP 2019 為 33%，AAP 2008 則說 >12 個月約 30%、<12 個月約 50%。', s: 'AFP 2019、AAP 2008' },
+    { lv: 'basic', q: '發作過 1 次以上單純型的孩子，AAP 2008 對抗癲癇藥的建議是？',
+      o: ['Phenobarbital 服用 2 年', '發作 2 次後開 valproate', '連續與間歇用藥都不建議', '發燒時一律給 diazepam'], a: 2,
+      e: '藥物雖能降再發，但毒性大於獲益，而且再發本身無害。Phenobarbital 行為副作用可達 20–40%；valproate 有罕見致命肝毒性，<2 歲風險最高。', s: 'AAP 2008' },
+
+    { lv: 'adv', q: '依 AAP 2011 Action 1b，哪位孩子的 LP 屬於「option」？',
+      o: ['24 個月，未打 PCV，外觀良好', '9 個月，疫苗完整，外觀良好', '14 個月，疫苗不詳，外觀良好', '10 個月，疫苗紀錄找不到，外觀良好'], a: 3,
+      e: '1b 只限 6–12 個月，AAP 認為 >12 個月的腦膜炎症狀臨床上可辨認。不詳與不足同樣算。', s: 'AAP 2011' },
+    { lv: 'adv', q: '4 歲童服 cefaclor 3 天後發生單純型，疫苗完整、外觀良好。何者正確？',
+      o: ['LP 是 option，由醫師依藥物與療程判斷', '因 >12 個月，不適用，不必考慮', '必須做 LP，屬 strong recommendation', '停用抗生素觀察 3 天再決定'], a: 0,
+      e: 'Action 1c 沒有年齡限制，evidence level D。AAP 找不到「pretreated」的正式定義，並明言交由個別醫師判斷。', s: 'AAP 2011' },
+    { lv: 'adv', q: '16 個月，首次發作，體溫 39.5°C，發燒 3 小時才發作，家族史無。本工具估的再發率是？',
+      o: ['13%', '23%', '32%', '62%'], a: 2,
+      e: '中 <18 個月與體溫 <40°C 兩項，32%。四項因子還有一等親家族史、發燒 <1 小時。注意 0、1、3、4 項的數字，工具與 AFP 2019 相差 1 個百分點。', s: 'Berg 1997、AFP 2019、本工具' },
+    { lv: 'adv', q: '發作局部且持續 20 分鐘，同日只一次。Annegers 1987 的 25 歲前無熱發作風險約為？',
+      o: ['2.4%', '17–22%', '6–8%', '49%'], a: 1,
+      e: '兩項複雜特徵 17–22%；單純型 2.4%、一項 6–8%、三項 49%。', s: 'Annegers 1987' },
+    { lv: 'adv', q: 'FEBSTAT 中，熱性重積後急性海馬 T2 異常的孩子，一年追蹤結果是？',
+      o: ['全部恢復，MRI 正常', '與單純型對照組無差異', '多數一年內發生顳葉癲癇', '追蹤的 14 人中 10 人呈海馬硬化'], a: 3,
+      e: '226 人中 22 人有急性異常，追蹤的 14 人有 10 人海馬硬化。研究當時的結論是與顳葉癲癇的關係還需要更長追蹤，不能說已證實。', s: 'FEBSTAT 2014' },
+    { lv: 'adv', q: '熱性重積後 LP 發現 CSF 白血球升高，最恰當的解讀是？',
+      o: ['不應歸因於抽搐，要找感染', '抽搐常見，可不處理', '只要血糖正常就可排除感染', '發作越久越常見，可觀察'], a: 0,
+      e: 'FEBSTAT 136 例非創傷性 LP：熱性重積很少造成細胞增多，而且與體溫、年齡、局部性、持續時間無關。', s: 'FEBSTAT CSF' },
+    { lv: 'adv', q: '首次複雜型，疫苗完整，檢查完全不像腦膜炎或腦炎。關於 LP 的證據，何者正確？',
+      o: ['AAP 2011 建議必做', 'Guedj 2017 此族群 630 人中無細菌性腦膜炎與 HSV 腦炎', 'Kimia 2010 中約 10% 細菌性腦膜炎', '複雜型 CSF 細胞增多一律是良性'], a: 1,
+      e: 'AAP 2011 不適用於複雜型。Kimia 2010 為 0.9%，3 例中 2 例有明顯臨床異常。兩者都是回溯研究，臨床懷疑時仍要做。', s: 'Guedj 2017、Kimia 2010' },
+    { lv: 'adv', q: '單純型住院觀察、進食差，要開維持輸液。AAP 2011 特別提醒什麼？',
+      o: ['應給高張鹽水預防再發', '例行補鈣與補鎂', '先驗血氨再開', '此族群血鈉偏低，避免低張液過度補水'], a: 3,
+      e: 'AAP 2011 指出熱性痙攣的孩子血鈉整體偏低，照護者應避免以低張液過度補水。', s: 'AAP 2011' },
+    { lv: 'adv', q: 'Murata 2018：肛門塞 acetaminophen，同一次發燒再發 9.1% vs 23.5%。如何整合到衛教？',
+      o: ['可推翻指引，所有人都要定時塞藥', '證明長期再發率也會下降', '單中心開放試驗，只看同次發燒；長期預防仍無證據', '指出 acetaminophen 不安全，應避免'], a: 2,
+      e: '該試驗無安慰劑、單中心，結果只涵蓋同次發燒。Cochrane 2021 整體未見退燒藥效益。可以說「可能減少短期再發」，但不能說「能預防熱性痙攣」。', s: 'Murata 2018、Cochrane 2021、AFP 2019' },
+    { lv: 'adv', q: '12 kg，已抽 6 分鐘，還沒有 IV。依本工具的公式，哪個選擇與劑量正確？',
+      o: ['Diazepam 肛門塞劑 6 mg', 'Midazolam 鼻內 6 mg', 'Midazolam 肌注 5 mg', '先放 IV 再給 lorazepam 1.2 mg'], a: 0,
+      e: 'Diazepam 塞劑 0.5 mg/kg = 6 mg。鼻內是 0.2 mg/kg = 2.4 mg；6 mg 是頰黏膜劑量。肌注 5 mg 的體重帶是 13–40 kg。不應為了 IV 延誤給藥。AES 2016 將塞劑與非靜脈 midazolam 列為 Level B。', s: 'AES 2016、本工具' }
+  ];
+
+  var MAP = {
+    root: '小兒熱性痙攣',
+    branches: [
+      { h: '定義與分型', c: '#b85a00', leaves: [
+        { t: '<b>定義：</b>6–60 個月、≥38°C、無中樞感染', s: 'AAP 2011' },
+        { t: '<b>單純型：</b>全身性、<15 分鐘、24 小時一次', s: 'AAP 2011' },
+        { t: '<b>複雜型：</b>局部、≥15 分鐘或 24 小時再發，一項即是', s: 'AAP 2011' },
+        { t: '<b>熱性重積：</b>≥30 分鐘，或連續發作間意識未恢復', s: 'FEBSTAT' }
+      ] },
+      { h: '紅旗：先不歸類', c: '#842029', leaves: [
+        { t: '<b>感染：</b>腦膜徵候、病容重、出血點', s: 'AAP 2011 1a' },
+        { t: '<b>意識：</b>遲遲未回基準，想腦炎、NCSE、代謝', s: '本工具' },
+        { t: '<b>年齡：</b><6 個月或 >60 個月不符定義', s: 'AAP 2011' },
+        { t: '<b>病史：</b>曾有無熱發作，依癲癇評估', s: 'AAP 2008' },
+        { t: '<b>局部缺損：</b>持續無力或顱內壓高，緊急影像', s: '本工具' }
+      ] },
+      { h: '單純型的檢查', c: '#0f5132', leaves: [
+        { t: '<b>LP 不例行：</b>外觀好、疫苗完整者', s: 'AAP 2011' },
+        { t: '<b>LP option：</b>6–12 個月疫苗不足或不詳', s: 'AAP 2011 1b' },
+        { t: '<b>LP option：</b>已用抗生素，不限年齡', s: 'AAP 2011 1c' },
+        { t: '<b>做 LP 時：</b>同送血培養與血糖', s: 'AAP 2011' },
+        { t: '<b>不做：</b>EEG、例行抽血、例行影像', s: 'AAP 2011 2–4' },
+        { t: '<b>輸液：</b>血鈉偏低，避免低張液過量', s: 'AAP 2011' }
+      ] },
+      { h: '複雜型與重積', c: '#664d03', leaves: [
+        { t: '<b>指引範圍：</b>AAP 2008、2011 都不涵蓋', s: 'AAP' },
+        { t: '<b>LP：</b>檢查正常者細菌性腦膜炎 0/630', s: 'Guedj 2017' },
+        { t: '<b>急診影像：</b>有意義者 1.5%，多另有異常', s: 'Kimia 2012' },
+        { t: '<b>重積 CSF：</b>細胞增多不可歸因於抽搐', s: 'FEBSTAT' },
+        { t: '<b>重積 EEG：</b>72 小時內異常 45.2%', s: 'FEBSTAT' },
+        { t: '<b>重積 MRI：</b>海馬 T2 異常 11.5%；追蹤 10/14 硬化', s: 'FEBSTAT' }
+      ] },
+      { h: '急救用藥', c: '#0a58ca', leaves: [
+        { t: '<b>時機：</b>發作 ≥5 分鐘即給藥', s: 'AES 2016' },
+        { t: '<b>有 IV：</b>lorazepam 或 diazepam（Level A）', s: 'AES 2016' },
+        { t: '<b>無 IV：</b>肛門 diazepam、肌注／鼻內／頰黏膜 midazolam（Level B）', s: 'AES 2016' },
+        { t: '<b>副作用：</b>鎮靜可能掩蓋中樞感染', s: 'AAP 2008' }
+      ] },
+      { h: '長期處置', c: '#6f42c1', leaves: [
+        { t: '<b>抗癲癇藥：</b>連續與間歇皆不建議', s: 'AAP 2008' },
+        { t: '<b>Phenobarbital：</b>行為副作用 20–40%', s: 'AAP 2008' },
+        { t: '<b>Valproate：</b>罕見致命肝毒性，<2 歲最高', s: 'AAP 2008' },
+        { t: '<b>Diazepam 間歇：</b>可降再發，副作用高；僅嚴重焦慮時討論', s: 'AAP 2008、Cochrane 2021' },
+        { t: '<b>退燒藥：</b>舒適用，不防長期再發', s: 'AAP 2008、Cochrane 2021' }
+      ] },
+      { h: '預後', c: '#087990', leaves: [
+        { t: '<b>再發：</b>約 1/3；因子：<18 個月、家族史、<40°C、發燒 <1 小時', s: 'Berg 1997' },
+        { t: '<b>單純型癲癇：</b>25 歲前 2.4%', s: 'Annegers 1987' },
+        { t: '<b>複雜特徵：</b>一項 6–8%、兩項 17–22%、三項 49%', s: 'Annegers 1987' },
+        { t: '<b>智力與行為：</b>單純型未見受損', s: 'AAP 2008' }
+      ] },
+      { h: '家長衛教', c: '#495057', leaves: [
+        { t: '<b>發作時：</b>側躺、移開硬物、不塞東西、不壓肢體', s: '本工具' },
+        { t: '<b>何時撥 119：</b>>5 分鐘、呼吸困難、叫不醒', s: 'AFP 2019' },
+        { t: '<b>疫苗：</b>繼續依時程接種', s: 'AFP 2019' }
+      ] }
+    ]
+  };
+
+  return { SRC: SRC, CASES: CASES, QUIZ: QUIZ, MAP: MAP };
+})();
+if (typeof module !== 'undefined') module.exports = TEACH;
+/*TEACH-END*/
 
   const $ = id => document.getElementById(id);
   const LVL = { must: '強烈建議', consider: '應考慮', option: '可考慮', no: '不需', defer: '視情況' };
@@ -632,6 +949,203 @@ if (typeof module !== 'undefined') module.exports = FS;
   $('resetBtn').addEventListener('click', () => { setForm({}); $('sampleNote').classList.add('d-none'); render(); });
   window.addEventListener('beforeprint', fillPrint); // 直接以 Ctrl+P 列印時也填入資料
   render();
+
+  // ---- 示範病例、考題、心智圖 ----
+  function el(tag, cls, text) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+
+  function loadCase(c) {
+    setForm(c.input);
+    $('sampleNote').classList.add('d-none');
+    location.hash = 'tool';
+    showView('tool');
+    render();
+  }
+
+  function renderCaseOutput(c) {
+    const r = FS.evaluate(c.input);
+    const box = el('div', 'case-output mt-2');
+    const dl = el('dl');
+    const rows = [
+      ['分類', r.label],
+      ['LP', `【${LVL[r.lp.level]}】${strip(r.lp.text)}`],
+      ['EEG', `【${LVL[r.eeg.level]}】${strip(r.eeg.text)}`],
+      ['影像', `【${LVL[r.image.level]}】${strip(r.image.text)}`],
+      ['檢驗', r.labs],
+      ['去向', r.dispo],
+      ['再發率', r.recur ? `${r.recur.pct}%（${r.recur.n}/4 項${r.recur.n ? '：' + r.recur.factors.join('、') : ''}）` : '不適用'],
+      ['癲癇風險', r.epi.text]
+    ];
+    if (r.rescue.offer && r.rescue.doses) {
+      const d = r.rescue.doses;
+      rows.push(['急救藥', `Diazepam 肛門塞劑 ${d.diazepamPR} mg；midazolam 鼻內 ${d.midazolamIN} mg、頰黏膜 ${d.midazolamBuccal} mg、肌注 ${d.midazolamIM} mg`]);
+    }
+    rows.forEach(([k, v]) => { dl.append(el('dt', '', k), el('dd', '', v)); });
+    box.append(el('div', 'fw-bold mb-1', '工具輸出（由決策引擎即時產生）'), dl);
+    return box;
+  }
+
+  function renderCases() {
+    const root = $('view-cases');
+    root.append(el('p', 'text-muted small', '6 例涵蓋本工具的主要分流。先看情境自己想，再展開分析；「帶入評估工具」會把資料填入第一頁。人物與數值皆為教學虛構。'));
+    TEACH.CASES.forEach((c, idx) => {
+      const card = el('div', 'card'); card.id = c.id;
+      const body = el('div', 'card-body');
+      const head = el('div', 'd-flex flex-wrap justify-content-between align-items-start gap-2');
+      head.append(el('h5', 'mb-1', `病例 ${idx + 1}：${c.title}`), el('span', 'badge text-bg-warning', c.tag));
+      const det = el('details', 'mt-2');
+      det.append(el('summary', '', '展開分析'), renderCaseOutput(c));
+      c.steps.forEach(s => {
+        const st = el('div', 'case-step');
+        st.append(el('strong', '', s.h), document.createTextNode(s.t));
+        det.append(st);
+      });
+      det.append(el('div', 'case-pit', '⚠️ ' + c.pitfall), el('div', 'case-src', '依據：' + c.src.join('、')));
+      const btn = el('button', 'btn btn-fs-outline btn-sm mt-1', '帶入評估工具');
+      btn.type = 'button';
+      btn.addEventListener('click', () => loadCase(c));
+      body.append(head, el('div', 'case-meta', c.who), el('p', 'mt-2 mb-1', c.story), el('div', 'case-q', '❓ ' + c.ask), btn, det);
+      card.append(body);
+      root.append(card);
+    });
+    root.append(renderSources());
+  }
+
+  function renderSources() {
+    const card = el('div', 'card');
+    const body = el('div', 'card-body small');
+    body.append(el('h6', '', '參考來源與核對範圍'));
+    const ul = el('ul', 'mb-1');
+    TEACH.SRC.forEach(s => {
+      const li = el('li');
+      const a = el('a', '', s.t); a.href = s.u; a.target = '_blank'; a.rel = 'noopener';
+      li.append(a, document.createTextNode(`（已讀：${s.r}）`));
+      ul.append(li);
+    });
+    body.append(ul, el('p', 'text-muted mb-0', '僅供教學與臨床輔助，處置仍須依病童實際狀況與院內規範調整。'));
+    card.append(body);
+    return card;
+  }
+
+  let quizLevel = 'all';
+  let quizAnswers = {};
+
+  function renderQuiz() {
+    const root = $('view-quiz');
+    root.replaceChildren();
+    const list = TEACH.QUIZ.map((q, i) => ({ q, i })).filter(x => quizLevel === 'all' || x.q.lv === quizLevel);
+    const done = list.filter(x => quizAnswers[x.i] !== undefined);
+    const right = done.filter(x => quizAnswers[x.i] === x.q.a).length;
+
+    const bar = el('div', 'quiz-bar d-flex flex-wrap gap-2 align-items-center justify-content-between');
+    const group = el('div', 'btn-group btn-group-sm');
+    [['all', '全部 20'], ['basic', '基礎 10'], ['adv', '高階 10']].forEach(([k, label]) => {
+      const b = el('button', 'btn ' + (quizLevel === k ? 'btn-fs' : 'btn-fs-outline'), label);
+      b.type = 'button';
+      b.setAttribute('aria-pressed', quizLevel === k);
+      b.addEventListener('click', () => { quizLevel = k; renderQuiz(); });
+      group.append(b);
+    });
+    const score = el('strong', '', `已答 ${done.length}/${list.length}，答對 ${right}`);
+    score.id = 'quizScore'; score.setAttribute('aria-live', 'polite');
+    const reset = el('button', 'btn btn-outline-secondary btn-sm', '重新作答');
+    reset.type = 'button';
+    reset.addEventListener('click', () => { quizAnswers = {}; renderQuiz(); });
+    bar.append(group, score, reset);
+    root.append(bar);
+
+    list.forEach(({ q, i }, n) => {
+      const card = el('div', 'card'); card.id = 'q' + (i + 1);
+      const body = el('div', 'card-body');
+      const head = el('div', 'd-flex gap-2 align-items-start mb-2');
+      head.append(el('span', 'badge ' + (q.lv === 'adv' ? 'text-bg-danger' : 'text-bg-secondary'), q.lv === 'adv' ? '高階' : '基礎'), el('div', 'fw-semibold', `${n + 1}. ${q.q}`));
+      body.append(head);
+      const picked = quizAnswers[i];
+      q.o.forEach((opt, j) => {
+        const b = el('button', 'quiz-opt', `${'ABCD'[j]}. ${opt}`);
+        b.type = 'button';
+        if (picked !== undefined) {
+          b.disabled = true;
+          if (j === q.a) b.classList.add('right');
+          else if (j === picked) b.classList.add('wrong');
+        }
+        b.addEventListener('click', () => { quizAnswers[i] = j; const y = window.scrollY; renderQuiz(); window.scrollTo(0, y); });
+        body.append(b);
+      });
+      if (picked !== undefined) {
+        const ex = el('div', 'quiz-exp');
+        ex.append(el('strong', picked === q.a ? 'text-success' : 'text-danger', picked === q.a ? '答對。' : `答錯，正解是 ${'ABCD'[q.a]}。`), document.createTextNode(q.e));
+        ex.append(el('div', 'quiz-src', '依據：' + q.s));
+        body.append(ex);
+      }
+      card.append(body);
+      root.append(card);
+    });
+  }
+
+  function renderMap() {
+    const root = $('view-map');
+    const top = el('div', 'd-flex flex-wrap gap-2 align-items-center justify-content-between');
+    top.append(el('div', 'mm-root', TEACH.MAP.root));
+    const tgl = el('button', 'btn btn-outline-secondary btn-sm', '全部收合');
+    tgl.type = 'button';
+    top.append(tgl);
+    const wrap = el('div', 'mm-branches');
+    TEACH.MAP.branches.forEach(b => {
+      const row = el('div', 'mm-branch');
+      row.style.setProperty('--mm', b.c);
+      const head = el('button', 'mm-head', b.h);
+      head.type = 'button';
+      head.setAttribute('aria-expanded', 'true');
+      const ul = el('ul', 'mm-leaves');
+      b.leaves.forEach(l => {
+        const li = el('li');
+        const m = l.t.match(/^<b>(.*?)<\/b>(.*)$/);
+        li.append(el('b', '', m[1]), document.createTextNode(m[2]), el('span', 'mm-tag', l.s));
+        ul.append(li);
+      });
+      head.addEventListener('click', () => {
+        const open = head.getAttribute('aria-expanded') === 'true';
+        head.setAttribute('aria-expanded', String(!open));
+        ul.hidden = open;
+      });
+      row.append(head, ul);
+      wrap.append(row);
+    });
+    tgl.addEventListener('click', () => {
+      const close = tgl.textContent === '全部收合';
+      wrap.querySelectorAll('.mm-head').forEach(h => { h.setAttribute('aria-expanded', String(!close)); });
+      wrap.querySelectorAll('.mm-leaves').forEach(u => { u.hidden = close; });
+      tgl.textContent = close ? '全部展開' : '全部收合';
+    });
+    const card = el('div', 'card');
+    const body = el('div', 'card-body');
+    body.append(top, wrap, el('p', 'text-muted small mt-3 mb-0', '點分支可收合。右側小字為依據；「本工具」表示此處的算法設定。'));
+    card.append(body);
+    root.append(card);
+  }
+
+  function showView(v) {
+    const views = ['tool', 'cases', 'quiz', 'map'];
+    if (!views.includes(v)) v = 'tool';
+    views.forEach(k => { $('view-' + k).hidden = k !== v; });
+    document.querySelectorAll('#tabNav .nav-link').forEach(a => {
+      const on = a.dataset.view === v;
+      a.classList.toggle('active', on);
+      if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    });
+    window.scrollTo(0, 0);
+  }
+
+  renderCases();
+  renderQuiz();
+  renderMap();
+  window.addEventListener('hashchange', () => showView(location.hash.slice(1)));
+  showView(location.hash.slice(1));
 
   if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
     window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
