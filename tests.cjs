@@ -75,12 +75,13 @@ t('單純型 → 可出院', () => assert.match(E({}).dispo, /出院/));
 t('FSE → 住院', () => assert.match(E({ duration: 'ge30' }).dispo, /住院/));
 t('意識未恢復 → 住院', () => assert.match(E({ notBaseline: true }).dispo, /住院/));
 
-console.log('復發率（Berg 1997）');
-t('24 月 無因子 → 13%', () => { const r = E({}).recur; assert.equal(r.n, 0); assert.equal(r.pct, 13); });
-t('12 月 → 1 項 23%', () => assert.equal(E({ ageMo: 12 }).recur.pct, 23));
+console.log('復發率（AFP 2019 第 2 表，引 Berg 1997）');
+t('24 月 無因子 → 14%', () => { const r = E({}).recur; assert.equal(r.n, 0); assert.equal(r.pct, 14); });
+t('12 月 → 1 項 24%', () => assert.equal(E({ ageMo: 12 }).recur.pct, 24));
+t('三項 → 63%', () => assert.equal(E({ ageMo: 10, famFS: true, tempLt40: true }).recur.pct, 63));
 t('17 月 + 家族史 → 32%', () => assert.equal(E({ ageMo: 17, famFS: true }).recur.pct, 32));
 t('18 月不算年齡因子', () => assert.equal(E({ ageMo: 18 }).recur.n, 0));
-t('四項全 → 76%', () => assert.equal(E({ ageMo: 10, famFS: true, tempLt40: true, feverLt1h: true }).recur.pct, 76));
+t('四項全 → 75%', () => assert.equal(E({ ageMo: 10, famFS: true, tempLt40: true, feverLt1h: true }).recur.pct, 75));
 t('非 FS 類 → 不計復發', () => assert.equal(E({ meningeal: true }).recur, null));
 
 console.log('癲癇風險');
@@ -109,6 +110,11 @@ t('單純低風險 → 不開立', () => assert.equal(E({}).rescue.offer, false)
 t('延長發作 → 開立', () => assert.equal(E({ duration: '15to29' }).rescue.offer, true));
 t('高復發（≥3 因子）→ 開立', () => assert.equal(E({ ageMo: 10, famFS: true, tempLt40: true }).rescue.offer, true));
 t('發作進行中 → 立即給藥', () => assert.match(E({ ongoing: true }).rescue.text, /立即/));
+t('重複給藥只限 IV（AES 2016）', () => {
+  const x = E({ ongoing: true }).rescue.text;
+  assert.match(x, /midazolam 肌注（單次）/); assert.match(x, /IV 兩者可重複一次/); assert.match(x, /肛門塞劑（單次）/);
+  assert.doesNotMatch(x, /5 分鐘未止可重複一次/);
+});
 t('12 kg diazepam PR 6 mg', () => assert.equal(FS.rescueDoses(12).diazepamPR, 6));
 t('50 kg diazepam PR cap 20', () => assert.equal(FS.rescueDoses(50).diazepamPR, 20));
 t('60 kg midazolam IN cap 10', () => assert.equal(FS.rescueDoses(60).midazolamIN, 10));
