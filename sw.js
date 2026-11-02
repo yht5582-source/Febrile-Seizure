@@ -1,5 +1,5 @@
 // 離線快取：同源檔案與 Bootstrap CSS，stale-while-revalidate
-const CACHE = 'febrile-seizure-v4';
+const CACHE = 'febrile-seizure-v5';
 const ASSETS = [
   './',
   './index.html',

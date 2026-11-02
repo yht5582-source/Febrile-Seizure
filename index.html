@@ -102,7 +102,7 @@
 
 <div class="container py-4 d-print-none">
   <h2 class="text-center mb-1" style="color: #fd7e14;">小兒熱性痙攣評估與決策路徑</h2>
-  <p class="text-center text-muted small mb-3">AAP 2011 單純型熱性痙攣神經診斷評估 · AAP 2008 長期處置 · v2.1</p>
+  <p class="text-center text-muted small mb-3">AAP 2011 單純型熱性痙攣神經診斷評估 · AAP 2008 長期處置 · v2.1.1</p>
 
   <ul class="nav nav-pills tab-nav justify-content-center gap-2 mb-4" id="tabNav">
     <li class="nav-item"><a class="nav-link active" href="#tool" data-view="tool" aria-current="page">評估工具</a></li>
@@ -530,7 +530,7 @@ const FS = (() => {
     if (i.famEpilepsy) epiFactors.push('癲癇家族史');
     if (i.feverLt1h) epiFactors.push('發燒 < 1 小時即發作');
     if (!isFSClass) epi = { text: '需由小兒神經科依病因評估。', factors: epiFactors };
-    else if (!epiFactors.length) epi = { text: '約 1–2%（一般兒童約 0.5–1%），僅略高。', factors: epiFactors };
+    else if (!epiFactors.length) epi = { text: '到 7 歲約 1%（AAP 2008）；到 25 歲無熱發作約 2.4%（Annegers 1987）。', factors: epiFactors };
     else {
       // Annegers 1987：複雜特徵數（延長、局部、反覆）；發作後局部缺損視同局部
       const nComplex = [prolonged, focal || i.focalDeficit, multiple].filter(Boolean).length;
@@ -538,7 +538,7 @@ const FS = (() => {
       epi = {
         text: nComplex
           ? `至 25 歲無熱發作風險${ANNEGERS[nComplex]}（Annegers 1987）。`
-          : (epiFactors.length >= 2 ? '升高，約 5–10% 或更高（多項危險因子）。' : '約 2–5%（一項危險因子）。'),
+          : '高於無危險因子的單純型（AFP 2019 列為危險因子）；已讀原文未提供此情況的百分比。',
         factors: epiFactors
       };
     }

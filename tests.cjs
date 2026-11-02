@@ -84,7 +84,17 @@ t('四項全 → 76%', () => assert.equal(E({ ageMo: 10, famFS: true, tempLt40: 
 t('非 FS 類 → 不計復發', () => assert.equal(E({ meningeal: true }).recur, null));
 
 console.log('癲癇風險');
-t('單純無因子 1–2%', () => assert.match(E({}).epi.text, /1–2%/));
+t('單純無因子 → 7 歲 1%、25 歲 2.4%', () => {
+  const x = E({}).epi.text;
+  assert.match(x, /7 歲約 1%/); assert.match(x, /2\.4%/);
+});
+['famEpilepsy', 'neuroHx', 'feverLt1h'].forEach(k => {
+  t(`無複雜特徵＋${k} → 不給無出處百分比`, () => {
+    const e = E({ [k]: true }).epi;
+    assert.ok(e.factors.length === 1); assert.doesNotMatch(e.text, /\d%/);
+  });
+});
+t('無複雜特徵＋多項因子 → 不給無出處百分比', () => assert.doesNotMatch(E({ famEpilepsy: true, neuroHx: true }).epi.text, /\d%/));
 t('延長+局部+反覆 → 49%', () => assert.match(E({ duration: '15to29', type: 'focal', recurrence: 2 }).epi.text, /49%/));
 t('一項複雜特徵 → 6–8%', () => ['15to29', 'ge30'].forEach(d => assert.match(E({ duration: d }).epi.text, /6–8%/)));
 t('局部一項 → 6–8%', () => assert.match(E({ type: 'focal' }).epi.text, /6–8%/));
