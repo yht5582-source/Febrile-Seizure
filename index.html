@@ -102,7 +102,7 @@
 
 <div class="container py-4 d-print-none">
   <h2 class="text-center mb-1" style="color: #fd7e14;">小兒熱性痙攣評估與決策路徑</h2>
-  <p class="text-center text-muted small mb-3">AAP 2011 單純型熱性痙攣神經診斷評估 · AAP 2008 長期處置 · v2.1.2</p>
+  <p class="text-center text-muted small mb-3">AAP 2011 單純型熱性痙攣神經診斷評估 · AAP 2008 長期處置 · v2.1.3</p>
 
   <ul class="nav nav-pills tab-nav justify-content-center gap-2 mb-4" id="tabNav">
     <li class="nav-item"><a class="nav-link active" href="#tool" data-view="tool" aria-current="page">評估工具</a></li>
@@ -323,7 +323,7 @@
       <ol class="mb-3">
         <li>Subcommittee on Febrile Seizures, AAP. Neurodiagnostic evaluation of the child with a simple febrile seizure. <em>Pediatrics</em> 2011;127(2):389–394. doi:10.1542/peds.2010-3318</li>
         <li>Steering Committee on Quality Improvement and Management, Subcommittee on Febrile Seizures, AAP. Febrile seizures: clinical practice guideline for the long-term management of the child with simple febrile seizures. <em>Pediatrics</em> 2008;121(6):1281–1286. doi:10.1542/peds.2008-0939</li>
-        <li>Berg AT, et al. Predictors of recurrent febrile seizures: a prospective cohort study. <em>Arch Pediatr Adolesc Med</em> 1997;151(4):371–378.（復發率引自 Smith 等，Am Fam Physician 2019 第 2 表：0–4 項兩年再發 14/24/32/63/75%；Berg 原表未直接讀到）</li>
+        <li>Berg AT, et al. Predictors of recurrent febrile seizures: a prospective cohort study. <em>Arch Pediatr Adolesc Med</em> 1997;151(4):371–378.（復發率引自 Smith 等，Am Fam Physician 2019 第 2 表：0–4 項兩年再發 14/24/32/63/75%。Saguil 等，Am Fam Physician 2020;101:497 表列 13/23/32/62/76%。兩者皆引 Berg 1997，原表未讀到）</li>
         <li>Annegers JF, et al. Factors prognostic of unprovoked seizures after febrile convulsions. <em>N Engl J Med</em> 1987;316(9):493–498.</li>
         <li>Shinnar S, et al. FEBSTAT study: MRI and EEG abnormalities after febrile status epilepticus. <em>Neurology</em> 2012;79(9):871–877；<em>Ann Neurol</em> 2014.</li>
         <li>Glauser T, et al. AES guideline: treatment of convulsive status epilepticus in children and adults. <em>Epilepsy Curr</em> 2016;16(1):48–61.</li>
@@ -395,6 +395,7 @@
 /*ENGINE-START*/
 const FS = (() => {
   // Berg 1997 四項因子（引自 AFP 2019 第 2 表，兩年再發風險）：0–4 項
+  // AFP 2020（同樣引 Berg 1997）表列 13/23/32/62/76；原表未讀到
   const RECUR_PCT = [14, 24, 32, 63, 75];
 
   const round1 = x => Math.round(x * 10) / 10;
@@ -575,6 +576,7 @@ const TEACH = (() => {
     { t: 'AAP 2011 神經診斷評估指引，Pediatrics 127:389', u: 'https://doi.org/10.1542/peds.2010-3318', r: '全文' },
     { t: 'AAP 2008 長期處置指引，Pediatrics 121:1281', u: 'https://doi.org/10.1542/peds.2008-0939', r: '全文' },
     { t: 'Smith 等，Am Fam Physician 2019;99:445', u: 'https://www.aafp.org/pubs/afp/issues/2019/0401/p445.html', r: '全文' },
+    { t: 'Saguil 等，Am Fam Physician 2020;101:497', u: 'https://www.aafp.org/pubs/afp/issues/2020/0415/p497.html', r: '全文' },
     { t: 'Cochrane 預防用藥回顧 2021', u: 'https://doi.org/10.1002/14651858.CD003031.pub4', r: '摘要' },
     { t: 'Murata 2018，Pediatrics 142:e20181009', u: 'https://doi.org/10.1542/peds.2018-1009', r: '摘要' },
     { t: 'Kimia 2009（單純型 LP），Pediatrics 123:6', u: 'https://doi.org/10.1542/peds.2007-3424', r: '摘要' },
@@ -601,7 +603,7 @@ const TEACH = (() => {
       steps: [
         { h: '分型', t: '全身性、小於 15 分鐘、24 小時內一次，年齡在 6–60 個月內，沒有中樞感染徵象，符合單純型。' },
         { h: '檢查', t: 'AAP 2011 對神經學正常的單純型明確不做 EEG、不例行抽血、不例行影像（皆為 strong recommendation）。此童發燒來源是中耳炎，檢查方向是找燒的原因，不是解釋抽搐。' },
-        { h: '再發率', t: '四項因子中只中「發作時體溫 <40°C」一項，兩年再發風險 24%（AFP 2019）。可以直接說「大約四分之一」。' },
+        { h: '再發率', t: '四項因子中只中「發作時體溫 <40°C」一項，兩年再發風險 24%（AFP 2019；AFP 2020 為 23%）。可以直接說「大約四分之一」。' },
         { h: '癲癇與發展', t: 'Annegers 1987 單純型到 25 歲的無熱發作風險為 2.4%。AAP 2008：沒有證據顯示智力或學習因單純型受損。' },
         { h: '衛教', t: '退燒藥讓孩子舒服，但不能預防再發。發作時側躺、不塞東西、看時間，超過 5 分鐘撥 119。' }
       ],
@@ -650,7 +652,7 @@ const TEACH = (() => {
       input: { ageMo: 15, weight: 10, duration: 'lt15', type: 'gen', recurrence: 2, famFS: true, tempLt40: true },
       expect: { key: 'complex', lp: 'no', eeg: 'no', image: 'no', pct: 63, offer: true, diazepamPR: 5 },
       steps: [
-        { h: '分型與再發率', t: '24 小時內兩次即複雜型。中 <18 個月、家族史、體溫 <40°C 三項，兩年再發風險 63%（AFP 2019）。' },
+        { h: '分型與再發率', t: '24 小時內兩次即複雜型。中 <18 個月、家族史、體溫 <40°C 三項，兩年再發風險 63%（AFP 2019；AFP 2020 為 62%）。' },
         { h: '預防用藥', t: 'AAP 2008（對象是單純型）不建議連續或間歇抗癲癇藥，理由是毒性大於獲益，也沒有證據能降低日後癲癇。家長焦慮嚴重時，AAP 提到發燒初期間歇口服 diazepam 可能有效。Cochrane 2021：間歇 diazepam 能降再發，但 benzodiazepine 組不良反應可達 36%。' },
         { h: '居家急救藥', t: '這是另一件事：不是預防，而是發作 5 分鐘未停時給。10 kg 依工具為 diazepam 肛門塞劑 5 mg，單次。工具因高再發率提示可以討論；AAP 2008 只討論其可行與安全性，並未訂出開立條件，是否開立請依距離、照顧者能力與院內規範判斷。' },
         { h: '鎮靜的代價', t: 'AAP 2008：任何途徑的 benzodiazepine 都可能掩蓋正在進展的中樞感染。給藥後要聯絡醫療人員。' },
@@ -735,7 +737,7 @@ const TEACH = (() => {
       e: 'Action 1c 沒有年齡限制，evidence level D。AAP 找不到「pretreated」的正式定義，並明言交由個別醫師判斷。', s: 'AAP 2011' },
     { lv: 'adv', q: '16 個月，首次發作，體溫 39.5°C，發燒 3 小時才發作，家族史無。兩年再發風險約為？',
       o: ['14%', '24%', '32%', '63%'], a: 2,
-      e: '中 <18 個月與體溫 <40°C 兩項，32%。四項因子還有一等親家族史、發燒 <1 小時。', s: 'AFP 2019（引 Berg 1997）' },
+      e: '中 <18 個月與體溫 <40°C 兩項，32%。四項因子還有一等親家族史、發燒 <1 小時。2 項時兩篇 AFP 都是 32%；其餘項數相差 1 個百分點（AFP 2019：14/24/63/75%；AFP 2020：13/23/62/76%），Berg 原表未讀到。', s: 'AFP 2019、AFP 2020（皆引 Berg 1997）' },
     { lv: 'adv', q: '發作局部且持續 20 分鐘，同日只一次。Annegers 1987 的 25 歲前無熱發作風險約為？',
       o: ['2.4%', '17–22%', '6–8%', '49%'], a: 1,
       e: '兩項複雜特徵 17–22%；單純型 2.4%、一項 6–8%、三項 49%。', s: 'Annegers 1987' },
@@ -806,7 +808,7 @@ const TEACH = (() => {
         { t: '<b>退燒藥：</b>舒適用，不防長期再發', s: 'AAP 2008、Cochrane 2021' }
       ] },
       { h: '預後', c: '#087990', leaves: [
-        { t: '<b>再發：</b>約 1/3；因子：<18 個月、家族史、<40°C、發燒 <1 小時', s: 'AFP 2019（引 Berg 1997）' },
+        { t: '<b>再發：</b>約 1/3；因子：<18 個月、家族史、<40°C、發燒 <1 小時', s: 'AFP 2019、2020（皆引 Berg 1997）' },
         { t: '<b>單純型癲癇：</b>25 歲前 2.4%', s: 'Annegers 1987' },
         { t: '<b>複雜特徵：</b>一項 6–8%、兩項 17–22%、三項 49%', s: 'Annegers 1987' },
         { t: '<b>智力與行為：</b>單純型未見受損', s: 'AAP 2008' }
@@ -889,7 +891,7 @@ if (typeof module !== 'undefined') module.exports = TEACH;
       : '不適用（非典型熱性痙攣）。';
     const epiLi = r.epi.text + (r.epi.factors.length ? `（危險因子：${r.epi.factors.join('、')}）` : '');
     $('resEdu').innerHTML = `
-      <li><strong>再次熱性痙攣機率：</strong> ${recurLi}</li>
+      <li><strong>再次熱性痙攣機率：</strong> ${recurLi}${r.recur ? '<div class="small text-muted">數字取自 AFP 2019；AFP 2020 表列 0–4 項為 13/23/32/62/76%。兩者皆引 Berg 1997，原表未讀到。</div>' : ''}</li>
       <li><strong>日後發展為癲癇機率：</strong> ${epiLi}</li>
       <li><strong>退燒藥與預防用藥：</strong> 退燒藥可改善不適但不能預防再發；不建議長期抗癲癇藥。</li>
       <li><strong>居家急救 SOP：</strong> 側躺防嗆、勿塞物入嘴、記錄時間（可錄影）。發作 &gt; 5 分鐘、呼吸困難或叫不醒請立即撥打 119。</li>`;

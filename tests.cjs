@@ -203,6 +203,9 @@ t('8 個分支，葉節點格式正確', () => {
   assert.equal(MAP.branches.length, 8);
   MAP.branches.forEach(b => { assert.ok(b.h && b.c && b.leaves.length >= 3); b.leaves.forEach(l => { assert.match(l.t, /^<b>.*?<\/b>.+$/); assert.ok(l.s); }); });
 });
+t('來源同時列出兩篇 AFP', () => { assert.ok(SRC.some(s => s.u.includes('2019/0401/p445'))); assert.ok(SRC.some(s => s.u.includes('2020/0415/p497'))); });
+t('第 13 題解析並列兩組再發率', () => { assert.match(QUIZ[12].e, /14\/24\/63\/75%/); assert.match(QUIZ[12].e, /13\/23\/62\/76%/); });
+t('工具畫面與文獻都註明兩組再發率', () => assert.equal((html.match(/13\/23\/32\/62\/76%/g) || []).length, 2));
 t('來源都有網址與閱讀範圍', () => SRC.forEach(s => { assert.match(s.u, /^https:\/\//); assert.ok(s.t && s.r); }));
 
 console.log(`\n${pass} passed, ${fail} failed`);
